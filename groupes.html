@@ -3,769 +3,686 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Nexus — Groupes sportifs</title>
-  <meta name="description" content="Rejoins ou crée un groupe sportif avec Nexus. Filtre par sport, niveau, horaire et partage les coûts plus facilement." />
+  <title>Rejoindre un groupe — Nexus</title>
+  <meta name="description" content="Rejoindre ou créer des groupes sportifs, filtrer, coût par personne, chat." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet">
 
-  <script>
-    document.documentElement.classList.add("js");
-  </script>
-
   <style>
     :root{
-  --bg:#0e1016;
-  --bg-2:#141923;
-  --panel:#151b27;
-  --panel-2:#101621;
-  --text:#f3f5fb;
-  --muted:#b8c0d2;
-  --line:rgba(255,255,255,.08);
-  --line-strong:rgba(255,255,255,.14);
-
-  --accent:#ff7a18;
-  --accent-2:#ff4d8d;
-  --accent-3:#42d7b5;
-  --accent-4:#7fd8ff;
-
-  --warn:#ffd36a;
-  --bad:#ff7e7e;
-  --ok:#42d7b5;
-
-  --radius:22px;
-  --shadow:0 20px 50px rgba(0,0,0,.34);
-  --shadow-soft:0 12px 30px rgba(0,0,0,.22);
-  --max:1100px;
-
-  --select-bg: rgba(255,255,255,.055);
-  --select-bg-strong: rgba(255,255,255,.075);
-  --select-border: rgba(255,255,255,.10);
-  --option-bg: #111827;
-  --option-text: #f3f5fb;
-}
-
-*{ box-sizing:border-box; }
-
-html{
-  background:#0e1016;
-  scroll-behavior:smooth;
-  color-scheme:dark;
-}
-
-body{
-  margin:0;
-  font-family:"Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  background:
-    radial-gradient(680px 380px at 0% -10%, rgba(255,122,24,.16), transparent 60%),
-    radial-gradient(760px 420px at 100% 0%, rgba(255,77,141,.12), transparent 58%),
-    radial-gradient(560px 340px at 85% 100%, rgba(66,215,181,.10), transparent 56%),
-    linear-gradient(180deg, #0e1016 0%, #121720 52%, #0d1118 100%);
-  color:var(--text);
-  line-height:1.5;
-  text-align:left;
-  -webkit-font-smoothing:antialiased;
-  text-rendering:optimizeLegibility;
-}
-
-a{ color:inherit; text-decoration:none; }
-
-.wrap{
-  max-width:var(--max);
-  margin:0 auto;
-  padding:22px;
-}
-
-header{
-  position:sticky;
-  top:0;
-  backdrop-filter:blur(16px);
-  background:rgba(14,16,22,.78);
-  border-bottom:1px solid rgba(255,255,255,.06);
-  z-index:20;
-}
-
-.nav{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:16px;
-}
-
-.brand{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  font-weight:800;
-  font-family:"Space Grotesk","Inter",system-ui,sans-serif;
-  letter-spacing:.2px;
-}
-
-.dot{
-  width:12px;
-  height:12px;
-  border-radius:999px;
-  background:linear-gradient(135deg, var(--accent), var(--accent-3));
-  box-shadow:
-    0 0 0 6px rgba(255,122,24,.10),
-    0 0 24px rgba(255,122,24,.18);
-}
-
-nav{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  color:var(--muted);
-  font-size:14px;
-}
-
-nav a{
-  padding:8px 10px;
-  border-radius:999px;
-  font-family:"Space Grotesk","Inter",system-ui,sans-serif;
-  font-weight:700;
-  transition:background .18s ease, color .18s ease, transform .18s ease;
-}
-
-nav a:hover{
-  background:rgba(255,255,255,.06);
-  color:var(--text);
-  transform:translateY(-1px);
-}
-
-.btn{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  padding:10px 14px;
-  min-height:46px;
-  border-radius:999px;
-  border:1px solid rgba(255,255,255,.10);
-  background:rgba(255,255,255,.06);
-  color:var(--text);
-  gap:10px;
-  font-weight:800;
-  font-family:"Space Grotesk","Inter",system-ui,sans-serif;
-  cursor:pointer;
-  box-shadow:0 10px 24px rgba(0,0,0,.16);
-  transition:
-    transform .22s cubic-bezier(.2,.9,.2,1),
-    box-shadow .22s cubic-bezier(.2,.9,.2,1),
-    background .22s cubic-bezier(.2,.9,.2,1),
-    filter .22s cubic-bezier(.2,.9,.2,1);
-}
-
-.btn:hover{
-  transform:translateY(-2px);
-  background:rgba(255,255,255,.10);
-  box-shadow:0 16px 30px rgba(0,0,0,.22);
-}
-
-.btn.primary{
-  border:none;
-  background:linear-gradient(135deg, var(--accent), var(--accent-2));
-  color:#160b05;
-  box-shadow:
-    0 18px 38px rgba(255,122,24,.20),
-    0 0 0 1px rgba(255,255,255,.05) inset;
-}
-
-.btn.warn{
-  border:none;
-  background:linear-gradient(135deg, #ffe08a, #ffd36a, #ffb703);
-  color:#1d1200;
-}
-
-.btn.danger{
-  border:1px solid rgba(255,126,126,.30);
-  background:rgba(255,126,126,.10);
-  color:#ffdede;
-}
-
-.btn.small{
-  padding:8px 12px;
-  min-height:40px;
-  font-size:13px;
-}
-
-.card{
-  background:linear-gradient(180deg, rgba(22,28,39,.96), rgba(15,20,30,.98));
-  border:1px solid var(--line);
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  backdrop-filter:blur(12px);
-}
-
-.top{
-  padding:18px;
-  display:flex;
-  gap:14px;
-  align-items:flex-start;
-  justify-content:space-between;
-  flex-wrap:wrap;
-}
-
-h1{
-  margin:0;
-  font-size:26px;
-  font-family:"Space Grotesk","Inter",system-ui,sans-serif;
-  letter-spacing:-.5px;
-}
-
-.sub{
-  margin-top:6px;
-  color:var(--muted);
-  font-size:14px;
-  max-width:75ch;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:1.25fr .75fr;
-  gap:14px;
-  margin-top:14px;
-  align-items:start;
-}
-
-.toolbar{
-  padding:14px 18px 18px;
-  border-top:1px solid rgba(255,255,255,.08);
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-}
-
-.row{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  align-items:center;
-}
-
-.input, select, textarea{
-  flex:1 1 220px;
-  padding:12px 12px;
-  border-radius:16px;
-  border:1px solid var(--select-border);
-  background:var(--select-bg);
-  color:var(--text);
-  outline:none;
-  font-size:14px;
-  font-weight:700;
-  letter-spacing:.2px;
-  transition:
-    background-color .18s cubic-bezier(.2,.9,.2,1),
-    border-color .18s cubic-bezier(.2,.9,.2,1),
-    box-shadow .18s cubic-bezier(.2,.9,.2,1),
-    transform .14s cubic-bezier(.2,.9,.2,1);
-  will-change:transform, box-shadow;
-  transform:translateZ(0);
-}
-
-.input::placeholder,
-textarea::placeholder{
-  color:rgba(184,192,210,.65);
-  font-weight:700;
-}
-
-:root{ color-scheme:dark; }
-
-select{
-  appearance:none;
-  -webkit-appearance:none;
-  -moz-appearance:none;
-  background-color:var(--select-bg-strong);
-  padding-right:44px;
-  background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath fill='%23dfe6f6' d='M5.5 7.5a1 1 0 0 1 1.4 0L10 10.6l3.1-3.1a1 1 0 1 1 1.4 1.4l-3.8 3.8a1 1 0 0 1-1.4 0L5.5 8.9a1 1 0 0 1 0-1.4Z'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;
-  background-position:right 12px center;
-  background-size:18px 18px;
-}
-
-select option{
-  background:var(--option-bg);
-  color:var(--option-text);
-  font-weight:700;
-}
-
-.input:hover, select:hover, textarea:hover{
-  background:rgba(255,255,255,.08);
-}
-
-.input:focus, select:focus, textarea:focus{
-  background:rgba(255,255,255,.09);
-  border-color:rgba(255,122,24,.34);
-  box-shadow:0 0 0 4px rgba(255,122,24,.10);
-  transform:translateY(-1px);
-}
-
-.input:active, select:active, textarea:active{
-  transform:translateY(0) scale(1.006);
-}
-
-*{ -webkit-tap-highlight-color: transparent; }
-
-textarea{
-  min-height:90px;
-  resize:vertical;
-}
-
-.hint{
-  color:var(--muted);
-  font-size:13px;
-}
-
-.pill{
-  display:inline-flex;
-  padding:6px 10px;
-  border-radius:999px;
-  border:1px solid rgba(255,255,255,.10);
-  background:rgba(255,255,255,.05);
-  color:var(--muted);
-  font-size:12px;
-  gap:6px;
-  align-items:center;
-}
-
-.pill.ok{
-  border-color:rgba(66,215,181,.18);
-  background:rgba(66,215,181,.10);
-  color:#ddfff5;
-}
-
-.pill.warn{
-  border-color:rgba(255,211,106,.22);
-  background:rgba(255,211,106,.08);
-  color:#fff0cb;
-}
-
-.pill.bad{
-  border-color:rgba(255,126,126,.22);
-  background:rgba(255,126,126,.08);
-  color:#ffe0e0;
-}
-
-.list{
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-}
-
-.group{
-  padding:14px 16px;
-}
-
-.groupHead{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  gap:10px;
-  flex-wrap:wrap;
-}
-
-.titleLine{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  align-items:center;
-}
-
-.gtitle{
-  font-size:16px;
-  font-weight:850;
-  letter-spacing:.2px;
-  font-family:"Space Grotesk","Inter",system-ui,sans-serif;
-}
-
-.meta{
-  margin-top:8px;
-  color:var(--muted);
-  font-size:13px;
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-  align-items:center;
-}
-
-.actions{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  align-items:center;
-  justify-content:flex-end;
-}
-
-details{
-  margin-top:10px;
-  border-top:1px solid rgba(255,255,255,.08);
-  padding-top:10px;
-}
-
-summary{
-  cursor:pointer;
-  color:var(--muted);
-  font-weight:700;
-  list-style:none;
-}
-
-summary::-webkit-details-marker{ display:none; }
-
-.detailGrid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-  margin-top:10px;
-}
-
-.box{
-  padding:12px;
-  border-radius:14px;
-  border:1px solid rgba(255,255,255,.10);
-  background:rgba(255,255,255,.04);
-}
-
-.box h3{
-  margin:0 0 6px;
-  font-size:14px;
-  font-family:"Space Grotesk","Inter",system-ui,sans-serif;
-}
-
-.box p{
-  margin:0;
-  color:var(--muted);
-  font-size:13px;
-}
-
-.link{
-  color:var(--text);
-  text-decoration:underline;
-  text-underline-offset:3px;
-}
-
-.chat{
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-}
-
-.chatLog{
-  max-height:170px;
-  overflow:auto;
-  border-radius:12px;
-  border:1px solid rgba(255,255,255,.10);
-  background:rgba(255,255,255,.03);
-  padding:10px;
-}
-
-.msg{
-  margin:0 0 8px;
-  color:var(--muted);
-  font-size:13px;
-}
-
-.msg b{ color:var(--text); }
-
-.toast{
-  position:fixed;
-  left:50%;
-  transform:translateX(-50%);
-  bottom:18px;
-  background:rgba(16,24,39,.94);
-  border:1px solid rgba(255,255,255,.12);
-  color:var(--text);
-  padding:10px 12px;
-  border-radius:12px;
-  box-shadow:var(--shadow);
-  z-index:50;
-  display:none;
-  max-width:min(720px, 92vw);
-}
-
-footer{
-  margin-top:18px;
-  padding:18px 0 34px;
-  border-top:1px solid rgba(255,255,255,.07);
-  color:var(--muted);
-  font-size:13px;
-}
-
-@media (max-width: 980px){
-  .grid{ grid-template-columns:1fr; }
-  nav{ display:none; }
-  .detailGrid{ grid-template-columns:1fr; }
-}
-
-@media (prefers-reduced-motion: reduce){
-  .input, select, textarea, .btn{ transition:none; }
-}
-
-/* Fade */
-html.js body{
-  opacity:0;
-  transition:opacity .25s ease;
-}
-html.js body.loaded{ opacity:1; }
-html.js body.leaving{ opacity:0; }
+      --bg:#0e1016;
+      --card:#131a25;
+      --text:#f3f5fb;
+      --muted:#b8c0d2;
+      --line:#243042;
+      --accent:#ff7a18;
+      --accent2:#ff4d8d;
+      --accent3:#42d7b5;
+      --warn:#ffd36a;
+      --bad:#ff7e7e;
+      --ok:#42d7b5;
+      --radius:18px;
+      --shadow: 0 12px 30px rgba(0,0,0,.35);
+      --max: 1100px;
+
+      --select-bg: rgba(255,255,255,.055);
+      --select-bg-strong: rgba(255,255,255,.075);
+      --select-border: rgba(255,255,255,.12);
+      --option-bg: #101722;
+      --option-text: #f3f5fb;
+    }
+
+    *{ box-sizing:border-box; }
+
+    html{
+      background:#0e1016;
+      color-scheme:dark;
+    }
+
+    body{
+      margin:0;
+      font-family:"Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background:
+        radial-gradient(900px 520px at 12% -10%, rgba(255,122,24,.17), transparent 55%),
+        radial-gradient(760px 440px at 88% 6%, rgba(255,77,141,.12), transparent 56%),
+        radial-gradient(620px 340px at 95% 95%, rgba(66,215,181,.10), transparent 54%),
+        linear-gradient(180deg, #0e1016 0%, #111722 55%, #0d1118 100%);
+      color: var(--text);
+      line-height:1.5;
+      text-align:left;
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+    }
+
+    a{ color:inherit; text-decoration:none; }
+    .wrap{ max-width: var(--max); margin: 0 auto; padding: 22px; }
+
+    header{
+      position: sticky; top: 0;
+      backdrop-filter: blur(14px);
+      background: rgba(14,16,22,.76);
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      z-index: 20;
+    }
+
+    .nav{
+      display:flex; align-items:center; justify-content:space-between;
+      gap: 16px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:800;
+      font-family:"Space Grotesk","Inter",system-ui,sans-serif;
+      letter-spacing:.2px;
+    }
+
+    .dot{
+      width:12px; height:12px; border-radius:999px;
+      background: linear-gradient(135deg, var(--accent), var(--accent3));
+      box-shadow:
+        0 0 0 4px rgba(255,122,24,.12),
+        0 0 18px rgba(255,122,24,.16);
+    }
+
+    nav{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    nav a{
+      padding:8px 10px;
+      border-radius:999px;
+      font-family:"Space Grotesk","Inter",system-ui,sans-serif;
+      font-weight:700;
+      transition: background .18s ease, color .18s ease, transform .18s ease;
+    }
+
+    nav a:hover{
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      transform: translateY(-1px);
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      gap:10px;
+      font-weight: 800;
+      font-family:"Space Grotesk","Inter",system-ui,sans-serif;
+      cursor: pointer;
+      user-select:none;
+      transition:
+        transform .18s ease,
+        background .18s ease,
+        box-shadow .18s ease,
+        filter .18s ease;
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+    }
+
+    .btn:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.09);
+      box-shadow: 0 14px 28px rgba(0,0,0,.18);
+    }
+
+    .btn.primary{
+      border: none;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color:#1a0f08;
+      box-shadow: 0 14px 26px rgba(255,122,24,.20);
+    }
+
+    .btn.warn{
+      border: none;
+      background: linear-gradient(135deg, #ffe08a, #ffd36a, #ffb703);
+      color:#1a1200;
+    }
+
+    .btn.danger{
+      border: 1px solid rgba(255,126,126,.30);
+      background: rgba(255,126,126,.10);
+      color: #ffdede;
+    }
+
+    .btn.small{ padding: 8px 12px; font-size: 13px; }
+
+    .card{
+      background: rgba(19,26,37,.84);
+      border: 1px solid rgba(36,48,66,.92);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .top{
+      padding: 18px;
+      display:flex;
+      gap: 14px;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    h1{
+      margin:0;
+      font-size: 26px;
+      font-family:"Space Grotesk","Inter",system-ui,sans-serif;
+      letter-spacing:-.4px;
+    }
+
+    .sub{
+      margin-top:6px;
+      color: var(--muted);
+      font-size: 14px;
+      max-width: 75ch;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap: 14px;
+      margin-top: 14px;
+      align-items: start;
+    }
+
+    .toolbar{
+      padding: 14px 18px 18px;
+      border-top: 1px solid rgba(36,48,66,.72);
+      display:flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    .input, select, textarea{
+      transition:
+        background-color .18s cubic-bezier(.2,.9,.2,1),
+        border-color .18s cubic-bezier(.2,.9,.2,1),
+        box-shadow .18s cubic-bezier(.2,.9,.2,1),
+        transform .14s cubic-bezier(.2,.9,.2,1);
+      will-change: transform, box-shadow;
+      transform: translateZ(0);
+
+      flex: 1 1 220px;
+      padding: 12px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--select-border);
+      background: var(--select-bg);
+      color: var(--text);
+      outline: none;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: .2px;
+      font-family:"Inter",system-ui,sans-serif;
+    }
+
+    .input::placeholder, textarea::placeholder{
+      color: rgba(184,192,210,.62);
+      font-weight: 700;
+    }
+
+    select{
+      appearance:none;
+      -webkit-appearance:none;
+      -moz-appearance:none;
+      background-color: var(--select-bg-strong);
+      padding-right: 44px;
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath fill='%23d6deef' d='M5.5 7.5a1 1 0 0 1 1.4 0L10 10.6l3.1-3.1a1 1 0 1 1 1.4 1.4l-3.8 3.8a1 1 0 0 1-1.4 0L5.5 8.9a1 1 0 0 1 0-1.4Z'/%3E%3C/svg%3E");
+      background-repeat:no-repeat;
+      background-position:right 12px center;
+      background-size:18px 18px;
+    }
+
+    select option{
+      background: var(--option-bg);
+      color: var(--option-text);
+      font-weight: 700;
+    }
+
+    .input:hover, select:hover, textarea:hover{
+      background: rgba(255,255,255,.08);
+    }
+
+    .input:focus, select:focus, textarea:focus{
+      background: rgba(255,255,255,.09);
+      border-color: rgba(255,122,24,.42);
+      box-shadow: 0 0 0 4px rgba(255,122,24,.10);
+      transform: translateY(-1px) scale(1.012);
+    }
+
+    .input:active, select:active, textarea:active{
+      transform: translateY(0px) scale(1.006);
+    }
+
+    *{ -webkit-tap-highlight-color: transparent; }
+
+    @media (prefers-reduced-motion: reduce){
+      .input, select, textarea{ transition: none; }
+    }
+
+    textarea{ min-height: 90px; resize: vertical; }
+    .hint{ color: var(--muted); font-size: 13px; }
+
+    .pill{
+      display:inline-flex;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.045);
+      color: var(--muted);
+      font-size: 12px;
+      gap: 6px;
+      align-items:center;
+    }
+
+    .pill.ok{
+      border-color: rgba(66,215,181,.24);
+      background: rgba(66,215,181,.10);
+      color: #ddfff5;
+    }
+
+    .pill.warn{
+      border-color: rgba(255,211,106,.24);
+      background: rgba(255,211,106,.08);
+      color: #fff2d0;
+    }
+
+    .pill.bad{
+      border-color: rgba(255,126,126,.24);
+      background: rgba(255,126,126,.08);
+      color: #ffdede;
+    }
+
+    .list{ display:flex; flex-direction: column; gap: 12px; }
+    .group{ padding: 14px 16px; }
+
+    .groupHead{
+      display:flex;
+      justify-content: space-between;
+      align-items:flex-start;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .titleLine{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .gtitle{
+      font-size: 16px;
+      font-weight: 850;
+      letter-spacing: .2px;
+      font-family:"Space Grotesk","Inter",system-ui,sans-serif;
+    }
+
+    .meta{
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 13px;
+      display:flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items:center;
+    }
+
+    .actions{
+      display:flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items:center;
+      justify-content:flex-end;
+    }
+
+    details{
+      margin-top: 10px;
+      border-top: 1px solid rgba(255,255,255,.08);
+      padding-top: 10px;
+    }
+
+    summary{
+      cursor: pointer;
+      color: var(--muted);
+      font-weight: 700;
+      list-style: none;
+      font-family:"Space Grotesk","Inter",system-ui,sans-serif;
+    }
+
+    summary::-webkit-details-marker{ display:none; }
+
+    .detailGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .box{
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.04);
+    }
+
+    .box h3{
+      margin:0 0 6px;
+      font-size: 14px;
+      font-family:"Space Grotesk","Inter",system-ui,sans-serif;
+    }
+
+    .box p{
+      margin:0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .link{
+      color: var(--text);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .chat{
+      display:flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .chatLog{
+      max-height: 170px;
+      overflow:auto;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      padding: 10px;
+    }
+
+    .msg{
+      margin: 0 0 8px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .msg b{ color: var(--text); }
+
+    .toast{
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 18px;
+      background: rgba(16,24,39,.92);
+      border: 1px solid rgba(255,255,255,.12);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      z-index: 50;
+      display:none;
+      max-width: min(720px, 92vw);
+    }
+
+    footer{
+      margin-top: 18px;
+      padding: 18px 0 34px;
+      border-top: 1px solid rgba(36,48,66,.72);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 980px){
+      .grid{ grid-template-columns: 1fr; }
+      nav{ display:none; }
+      .detailGrid{ grid-template-columns: 1fr; }
+    }
+
+    html { background: #0e1016; }
+    body{
+      opacity: 0;
+      transition: opacity .25s ease;
+    }
+    body.loaded{ opacity: 1; }
+    body.leaving{ opacity: 0; }
   </style>
 </head>
-<body>
-  <div class="noise"></div>
+<script>
+  // Fade-in au chargement
+  window.addEventListener("DOMContentLoaded", () => {
+    document.body.classList.add("loaded");
+  });
 
+  // Fade-out quand on clique un lien interne
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest("a");
+    if(!a) return;
+
+    const href = a.getAttribute("href") || "";
+
+    // ignore ancres (#), liens externes, new tab
+    if(href.startsWith("#")) return;
+    if(a.target === "_blank") return;
+    if(href.startsWith("http")) return;
+    if(href.startsWith("mailto:") || href.startsWith("tel:")) return;
+
+    e.preventDefault();
+    document.body.classList.add("leaving");
+    setTimeout(() => { window.location.href = href; }, 220);
+  });
+</script>
+
+<body>
   <header>
     <div class="wrap nav">
-      <a class="brand" href="index.html" aria-label="Retour à l'accueil Nexus">
-        <div class="brand-mark"></div>
-        <div class="brand-copy">
-          <span class="brand-name">Nexus</span>
-          <span class="brand-sub">Le sport commence par une connexion</span>
-        </div>
-      </a>
-
+      <div class="brand">
+        <div class="dot"></div>
+        <div>Nexus</div>
+      </div>
       <nav>
         <a href="index.html">Accueil</a>
         <a href="horaires.html">Horaires</a>
         <a href="groupes.html">Groupes</a>
       </nav>
-
-      <a class="btn primary" href="horaires.html">Voir les horaires</a>
+      <a class="btn" href="index.html">← Retour</a>
     </div>
   </header>
 
-  <main>
-    <section class="page-top">
-      <div class="wrap">
-        <div class="card top-card">
-          <div class="top-grid">
-            <div>
-              <div class="eyebrow">
-                <span class="dot"></span>
-                Groupes sportifs
-              </div>
-
-              <h1>Rejoins un groupe.</h1>
-
-              <p class="lead">
-                Trouve une activité selon le sport, le niveau, le moment et le coût par personne.
-                Même système que ton prototype original, avec un thème plus fort et plus propre.
-              </p>
-
-              <div class="hero-actions">
-                <a class="btn primary" href="#create">Créer un groupe</a>
-                <a class="btn" href="horaires.html">Consulter les horaires</a>
-              </div>
-
-              <div class="stats">
-                <div class="stat-chip">
-                  <strong id="openCount">0</strong>
-                  <span>groupe(s) ouvert(s)</span>
-                </div>
-                <div class="stat-chip">
-                  <strong id="totalCount">0</strong>
-                  <span>activité(s)</span>
-                </div>
-                <div class="stat-chip">
-                  <strong>coûts partagés</strong>
-                  <span>plus accessibles</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="soft profile-box">
-              <div class="profile-title">Ton profil rapide</div>
-              <div class="profile-sub">Entre ton prénom pour rejoindre ou créer une activité.</div>
-
-              <input id="displayName" placeholder="Ex. Alex" />
-
-              <div class="row" style="margin-top:10px;">
-                <label class="pill" style="cursor:pointer;">
-                  <input id="reminders" type="checkbox" style="accent-color: var(--accent); width:auto; min-height:auto; padding:0; margin:0;">
-                  Activer “rappels”
-                </label>
-                <span class="pill ok" id="reliability">Fiabilité: 100</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="wrap shell">
+  <main class="wrap">
+    <div class="card">
+      <div class="top">
         <div>
-          <div class="soft filters">
-            <div class="filters-grid">
-              <input id="q" placeholder="Rechercher : tennis, jeudi, 18h, gratuit..." />
-              <select id="sport">
-                <option value="">Sport (tous)</option>
-                <option>Basket</option>
-                <option>Volley</option>
-                <option>Badminton</option>
-                <option>Tennis</option>
-                <option>Pickleball</option>
-                <option>Patinage</option>
-                <option>Hockey</option>
-                <option>Multi</option>
-              </select>
-              <select id="niveau">
-                <option value="">Niveau (tous)</option>
-                <option>Débutant</option>
-                <option>Intermédiaire</option>
-                <option>Avancé</option>
-                <option>Mixte</option>
-              </select>
-              <select id="statut">
-                <option value="">Statut (tous)</option>
-                <option value="open">Ouvert</option>
-                <option value="full">Complet</option>
-                <option value="confirmed">Confirmé</option>
-              </select>
-            </div>
+          <h1>Rejoindre un groupe</h1>
+          <div class="sub">
+            Trouve un groupe (filtre + recherche), rejoins en 1 clic, ou crée le tien.
+            Inclus : <b>coût par personne</b>, <b>confirmation</b> (quand assez de participants), mini <b>chat</b> et <b>partage</b>.
+          </div>
+        </div>
 
-            <div class="filters-grid-2">
-              <select id="lieu">
-                <option value="">Lieu (tous)</option>
-                <option>BdeB</option>
-                <option>Claude-Robillard</option>
-                <option>Aréna Bill-Durnan</option>
-                <option>Aréna Michel-Normandin</option>
-                <option>Aréna Mont-Royal</option>
-                <option>Parc Martin-Luther-King</option>
-                <option>Parc Warren-Allmand</option>
-                <option>Centre Saint-Denis</option>
-              </select>
-
-              <select id="jour">
-                <option value="">Jour (tous)</option>
-                <option>Lundi</option>
-                <option>Mardi</option>
-                <option>Mercredi</option>
-                <option>Jeudi</option>
-                <option>Vendredi</option>
-                <option>Samedi</option>
-                <option>Dimanche</option>
-              </select>
-
-              <select id="prix">
-                <option value="">Prix/pers (tous)</option>
-                <option value="0-5">0–5$</option>
-                <option value="5-10">5–10$</option>
-                <option value="10-20">10–20$</option>
-                <option value="20-999">20$+</option>
-              </select>
-
-              <button class="btn small" id="reset">Reset filtres</button>
-              <button class="btn small danger" id="wipe">Effacer démo</button>
-            </div>
-
-            <div class="filters-note">
-              Recherche, filtres, coût par personne, création, liste d’attente, chat et partage : même logique que ton système original.
+        <!-- RIGHT PANEL -->
+        <div class="row" style="align-items:flex-start;">
+          <div style="min-width:280px">
+            <div class="hint" style="margin-bottom:6px;">Ton prénom (affiché dans les groupes)</div>
+            <input id="displayName" class="input" placeholder="Ex. Alex" />
+            <div class="row" style="margin-top:8px;">
+              <label class="pill" style="cursor:pointer;">
+                <input id="reminders" type="checkbox" style="accent-color: var(--accent);">
+                Activer “rappels”
+              </label>
+              <span class="pill ok" id="reliability">Fiabilité: 100</span>
             </div>
           </div>
+        </div>
+      </div><!-- /top -->
 
-          <div class="section-head">
+      <div class="toolbar">
+        <div class="row">
+          <input id="q" class="input" placeholder="Rechercher (ex. tennis, BdeB, jeudi, 18h, gratuit…)" />
+          <select id="sport">
+            <option value="">Sport (tous)</option>
+            <option>Basket</option>
+            <option>Volley</option>
+            <option>Badminton</option>
+            <option>Tennis</option>
+            <option>Pickleball</option>
+            <option>Patinage</option>
+            <option>Hockey</option>
+            <option>Multi</option>
+          </select>
+          <select id="niveau">
+            <option value="">Niveau (tous)</option>
+            <option>Débutant</option>
+            <option>Intermédiaire</option>
+            <option>Avancé</option>
+            <option>Mixte</option>
+          </select>
+          <select id="statut">
+            <option value="">Statut (tous)</option>
+            <option value="open">Ouvert</option>
+            <option value="full">Complet</option>
+            <option value="confirmed">Confirmé</option>
+          </select>
+        </div>
+
+        <div class="row">
+          <select id="lieu">
+            <option value="">Lieu (tous)</option>
+            <option>BdeB</option>
+            <option>Claude-Robillard</option>
+            <option>Aréna Bill-Durnan</option>
+            <option>Aréna Michel-Normandin</option>
+            <option>Aréna Mont-Royal</option>
+            <option>Parc Martin-Luther-King</option>
+            <option>Parc Warren-Allmand</option>
+            <option>Centre Saint-Denis</option>
+          </select>
+
+          <select id="jour">
+            <option value="">Jour (tous)</option>
+            <option>Lundi</option><option>Mardi</option><option>Mercredi</option><option>Jeudi</option>
+            <option>Vendredi</option><option>Samedi</option><option>Dimanche</option>
+          </select>
+
+          <select id="prix">
+            <option value="">Prix/pers (tous)</option>
+            <option value="0-5">0–5$</option>
+            <option value="5-10">5–10$</option>
+            <option value="10-20">10–20$</option>
+            <option value="20-999">20$+</option>
+          </select>
+
+          <button class="btn small" id="reset">Reset filtres</button>
+          <button class="btn small danger" id="wipe">Effacer démo</button>
+        </div>
+      </div><!-- /toolbar -->
+    </div><!-- /card -->
+
+    <div class="grid">
+      <!-- LIST -->
+      <section>
+        <div class="card" style="padding:14px 16px; margin-bottom:12px;">
+          <div class="row" style="justify-content:space-between;">
             <div>
-              <h2>Groupes disponibles</h2>
-              <div class="count" id="count">0 groupe(s) affiché(s)</div>
+              <div class="gtitle">Groupes disponibles</div>
+              <div class="hint" id="count"></div>
             </div>
-            <p>
-              Rejoins, quitte, filtre ou ouvre les détails pour voir les participants, le chat et le partage.
-            </p>
-          </div>
-
-          <div class="list" id="groups"></div>
-        </div>
-
-        <aside>
-          <div class="card aside-card" id="create">
-            <h2 class="aside-title">Créer un groupe</h2>
-            <p class="aside-sub">
-              Crée une activité avec coût total, places et notes. Le coût par personne est calculé automatiquement.
-            </p>
-
-            <div class="stack">
-              <input class="input" id="title" placeholder="Titre (ex. Badminton jeudi 18h)" />
-
-              <div class="grid2">
-                <select id="cSport">
-                  <option>Badminton</option>
-                  <option>Basket</option>
-                  <option>Volley</option>
-                  <option>Tennis</option>
-                  <option>Pickleball</option>
-                  <option>Patinage</option>
-                  <option>Hockey</option>
-                  <option>Multi</option>
-                </select>
-
-                <select id="cNiveau">
-                  <option>Débutant</option>
-                  <option>Intermédiaire</option>
-                  <option>Avancé</option>
-                  <option>Mixte</option>
-                </select>
-              </div>
-
-              <div class="grid2">
-                <select id="cLieu">
-                  <option>BdeB</option>
-                  <option>Claude-Robillard</option>
-                  <option>Centre Saint-Denis</option>
-                  <option>Aréna Bill-Durnan</option>
-                  <option>Parc Martin-Luther-King</option>
-                  <option>Parc Warren-Allmand</option>
-                  <option>Aréna Mont-Royal</option>
-                  <option>Aréna Michel-Normandin</option>
-                </select>
-
-                <select id="cJour">
-                  <option>Lundi</option>
-                  <option>Mardi</option>
-                  <option>Mercredi</option>
-                  <option>Jeudi</option>
-                  <option>Vendredi</option>
-                  <option>Samedi</option>
-                  <option>Dimanche</option>
-                </select>
-              </div>
-
-              <div class="grid2">
-                <input class="input" id="cHeure" placeholder="Heure (ex. 18:00)" />
-                <input class="input" id="cDuree" placeholder="Durée (h) (ex. 1.5)" />
-              </div>
-
-              <div class="grid2">
-                <input class="input" id="cPlaces" placeholder="Places max (ex. 10)" />
-                <input class="input" id="cCost" placeholder="Coût total (ex. 60)" />
-              </div>
-
-              <input class="input" id="cFee" placeholder="Frais plateforme / pers (ex. 1.00)" />
-              <textarea id="cNotes" placeholder="Notes : équipement, niveau, règles, point de rencontre..."></textarea>
-
-              <div class="row" style="justify-content:space-between;">
-                <button class="btn warn" id="createBtn">Créer le groupe</button>
-                <button class="btn small" id="seed">Ajouter démos</button>
-              </div>
-            </div>
-
-            <div class="subsection">
-              <h3>Mes groupes</h3>
-              <div id="myGroups" class="list" style="margin-top:10px;"></div>
+            <div class="row">
+              <span class="pill ok">Ouvert</span>
+              <span class="pill warn">Complet / attente</span>
+              <span class="pill">Confirmé</span>
             </div>
           </div>
-        </aside>
-      </div>
-    </section>
-
-    <footer>
-      <div class="wrap footer-row">
-        <div>© <span id="year"></span> Nexus • Groupes sportifs</div>
-        <div>
-          <a href="index.html">Accueil</a> • <a href="horaires.html">Horaires</a>
         </div>
-      </div>
-    </footer>
+
+        <div class="list" id="groups"></div>
+      </section>
+
+      <!-- CREATE + MY GROUPS -->
+      <aside class="card" style="padding:14px 16px;">
+        <div class="gtitle">Créer un groupe</div>
+        <div class="hint" style="margin-top:6px;">
+          Crée une activité : coût total → calcul automatique du coût/pers. Les autres rejoignent et l’activité devient “confirmée”.
+        </div>
+
+        <div class="row" style="margin-top:12px;">
+          <input class="input" id="title" placeholder="Titre (ex. Badminton jeudi 18h)" />
+        </div>
+
+        <div class="row">
+          <select id="cSport">
+            <option>Badminton</option><option>Basket</option><option>Volley</option><option>Tennis</option>
+            <option>Pickleball</option><option>Patinage</option><option>Hockey</option><option>Multi</option>
+          </select>
+          <select id="cNiveau">
+            <option>Débutant</option><option>Intermédiaire</option><option>Avancé</option><option>Mixte</option>
+          </select>
+        </div>
+
+        <div class="row">
+          <select id="cLieu">
+            <option>BdeB</option>
+            <option>Claude-Robillard</option>
+            <option>Centre Saint-Denis</option>
+            <option>Aréna Bill-Durnan</option>
+            <option>Parc Martin-Luther-King</option>
+            <option>Parc Warren-Allmand</option>
+            <option>Aréna Mont-Royal</option>
+            <option>Aréna Michel-Normandin</option>
+          </select>
+          <select id="cJour">
+            <option>Lundi</option><option>Mardi</option><option>Mercredi</option><option>Jeudi</option>
+            <option>Vendredi</option><option>Samedi</option><option>Dimanche</option>
+          </select>
+        </div>
+
+        <div class="row">
+          <input class="input" id="cHeure" placeholder="Heure (ex. 18:00)" />
+          <input class="input" id="cDuree" placeholder="Durée (h) (ex. 1.5)" />
+        </div>
+
+        <div class="row">
+          <input class="input" id="cPlaces" placeholder="Places max (ex. 10)" />
+          <input class="input" id="cCost" placeholder="Coût total (ex. 60)" />
+        </div>
+
+        <div class="row">
+          <input class="input" id="cFee" placeholder="Frais plateforme / pers (ex. 1.00)" />
+        </div>
+
+        <div class="row">
+          <textarea id="cNotes" placeholder="Notes (niveau, équipement, règles, point de rencontre...)"></textarea>
+        </div>
+
+        <div class="row" style="justify-content:space-between;">
+          <button class="btn warn" id="create">✨ Créer le groupe</button>
+          <button class="btn small" id="seed">Ajouter démos</button>
+        </div>
+
+        
+        </div>
+      </aside>
+    </div>
+
+    
   </main>
 
   <div class="toast" id="toast"></div>
@@ -782,25 +699,20 @@ html.js body.leaving{ opacity:0; }
       try { return JSON.parse(localStorage.getItem(KEY) || "[]"); }
       catch { return []; }
     }
-
     function saveGroups(groups){
       localStorage.setItem(KEY, JSON.stringify(groups));
     }
-
     function loadUser(){
       try { return JSON.parse(localStorage.getItem(USERKEY) || "{}"); }
       catch { return {}; }
     }
-
     function saveUser(u){
       localStorage.setItem(USERKEY, JSON.stringify(u));
     }
-
     function loadReliability(){
       try { return JSON.parse(localStorage.getItem(RELKEY) || '{"noShow":0}'); }
       catch { return { noShow: 0 }; }
     }
-
     function uid(){
       return Math.random().toString(16).slice(2) + Date.now().toString(16);
     }
@@ -932,14 +844,11 @@ html.js body.leaving{ opacity:0; }
         box.innerHTML = `<div class="hint">Entre ton prénom pour voir tes groupes.</div>`;
         return;
       }
-
       const mine = groups.filter(g => (g.participants || []).includes(name) || (g.waitlist || []).includes(name));
-
       if(!mine.length){
         box.innerHTML = `<div class="hint">Aucun groupe rejoint pour l’instant.</div>`;
         return;
       }
-
       box.innerHTML = mine.map(g => {
         const st = statusOf(g);
         const tag = (g.participants || []).includes(name) ? "Participant" : "Attente";
@@ -948,7 +857,7 @@ html.js body.leaving{ opacity:0; }
           <div class="box">
             <div style="display:flex; justify-content:space-between; gap:8px; flex-wrap:wrap;">
               <div>
-                <div style="font-weight:800; font-family:'Space Grotesk','Inter',sans-serif;">${escapeHtml(g.title)}</div>
+                <div style="font-weight:850;">${escapeHtml(g.title)}</div>
                 <div class="hint">${escapeHtml(g.jour)} ${escapeHtml(g.heure)} • ${escapeHtml(g.lieu)} • ${st.joined}/${st.max}</div>
               </div>
               <span class="pill ${pill}">${tag}</span>
@@ -1210,9 +1119,7 @@ html.js body.leaving{ opacity:0; }
         return true;
       });
 
-      $("count").textContent = `${filtered.length} groupe(s) affiché(s)`;
-      $("totalCount").textContent = groups.length;
-      $("openCount").textContent = groups.filter(g => !statusOf(g).full).length;
+      $("count").textContent = `${filtered.length} groupe(s) affiché(s) • ${groups.length} total`;
 
       renderMyGroups(groups, name);
 
@@ -1246,7 +1153,7 @@ html.js body.leaving{ opacity:0; }
 
         const sourceLink = g.source
           ? `<a class="link" href="${escapeHtml(g.source)}" target="_blank" rel="noopener">Source</a>`
-          : `<span style="color:rgba(184,192,210,.7)">—</span>`;
+          : `<span style="color:rgba(183,196,221,.7)">—</span>`;
 
         const html = `
           <div class="card group">
@@ -1348,7 +1255,7 @@ html.js body.leaving{ opacity:0; }
         toast(e.target.checked ? "Rappels activés (MVP)." : "Rappels désactivés.");
       });
 
-      $("createBtn").addEventListener("click", createGroup);
+      $("create").addEventListener("click", createGroup);
       $("seed").addEventListener("click", () => {
         localStorage.removeItem(KEY);
         seedIfEmpty();
@@ -1373,28 +1280,31 @@ html.js body.leaving{ opacity:0; }
     }
 
     init();
-
-    document.getElementById("year").textContent = new Date().getFullYear();
-
-    window.addEventListener("DOMContentLoaded", () => {
-      document.body.classList.add("loaded");
-    });
-
-    document.addEventListener("click", (e) => {
-      const a = e.target.closest("a");
-      if(!a) return;
-
-      const href = a.getAttribute("href") || "";
-
-      if(href.startsWith("#")) return;
-      if(a.target === "_blank") return;
-      if(href.startsWith("http")) return;
-      if(href.startsWith("mailto:") || href.startsWith("tel:")) return;
-
-      e.preventDefault();
-      document.body.classList.add("leaving");
-      setTimeout(() => { window.location.href = href; }, 220);
-    });
   </script>
+  <script>
+  // Fade-in au chargement
+  window.addEventListener("DOMContentLoaded", () => {
+    document.body.classList.add("loaded");
+  });
+
+  // Fade-out quand on clique un lien interne
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest("a");
+    if(!a) return;
+
+    const href = a.getAttribute("href") || "";
+
+    // ignore ancres (#), liens externes, new tab
+    if(href.startsWith("#")) return;
+    if(a.target === "_blank") return;
+    if(href.startsWith("http")) return;
+    if(href.startsWith("mailto:") || href.startsWith("tel:")) return;
+
+    e.preventDefault();
+    document.body.classList.add("leaving");
+    setTimeout(() => { window.location.href = href; }, 220);
+  });
+</script>
+
 </body>
 </html>
