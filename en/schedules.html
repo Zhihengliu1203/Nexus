@@ -1,1 +1,986 @@
+<!doctype html>
+<html lang="en-CA">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nexus — Schedules</title>
+  <meta name="description" content="Schedules, locations, and sports prices to organize your activities more easily with Nexus." />
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    document.documentElement.classList.add("js");
+  </script>
+
+  <style>
+    :root{
+      --bg:#0e1016;
+      --bg-2:#141923;
+      --panel:#151b27;
+      --panel-2:#101621;
+      --text:#f3f5fb;
+      --muted:#b8c0d2;
+      --line:rgba(255,255,255,.08);
+      --line-strong:rgba(255,255,255,.14);
+
+      --accent:#ff7a18;
+      --accent-2:#ff4d8d;
+      --accent-3:#42d7b5;
+      --accent-4:#7fd8ff;
+
+      --shadow:0 20px 50px rgba(0,0,0,.35);
+      --shadow-soft:0 12px 30px rgba(0,0,0,.22);
+
+      --radius:24px;
+      --radius-md:18px;
+      --radius-sm:14px;
+      --max:1180px;
+    }
+
+    html{
+      scroll-behavior:smooth;
+      background:var(--bg);
+      color-scheme:dark;
+    }
+
+    *{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      color:var(--text);
+      font-family:"Inter",system-ui,sans-serif;
+      line-height:1.55;
+      background:
+        radial-gradient(680px 380px at 0% -10%, rgba(255,122,24,.16), transparent 60%),
+        radial-gradient(760px 420px at 100% 0%, rgba(255,77,141,.12), transparent 58%),
+        radial-gradient(560px 340px at 85% 100%, rgba(66,215,181,.10), transparent 56%),
+        linear-gradient(180deg, #0e1016 0%, #121720 52%, #0d1118 100%);
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+    }
+
+    .noise{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      opacity:.03;
+      z-index:0;
+      background-image:
+        radial-gradient(circle at 20% 20%, #fff 0 1px, transparent 1px),
+        radial-gradient(circle at 70% 40%, #fff 0 1px, transparent 1px),
+        radial-gradient(circle at 40% 80%, #fff 0 1px, transparent 1px),
+        radial-gradient(circle at 85% 90%, #fff 0 1px, transparent 1px);
+      background-size:180px 180px;
+    }
+
+    a{
+      color:inherit;
+      text-decoration:none;
+    }
+
+    .title-font,
+    h1,h2,h3,
+    .brand-name,
+    .btn,
+    nav a,
+    th{
+      font-family:"Space Grotesk","Inter",system-ui,sans-serif;
+    }
+
+    .wrap{
+      width:min(var(--max), calc(100% - 32px));
+      margin:0 auto;
+      position:relative;
+      z-index:1;
+    }
+
+    .card{
+      background:linear-gradient(180deg, rgba(22,28,39,.96), rgba(15,20,30,.98));
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(12px);
+    }
+
+    .soft{
+      background:rgba(255,255,255,.045);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:var(--radius-sm);
+      box-shadow:var(--shadow-soft);
+    }
+
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:8px 14px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.05);
+      color:#ffe6d9;
+      font-size:13px;
+      font-weight:700;
+      letter-spacing:.2px;
+    }
+
+    .eyebrow .dot{
+      width:9px;
+      height:9px;
+      border-radius:999px;
+      background:linear-gradient(135deg, var(--accent), var(--accent-3));
+      box-shadow:0 0 0 6px rgba(255,122,24,.12);
+    }
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:40;
+      background:rgba(14,16,22,.78);
+      backdrop-filter:blur(16px);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+
+    .nav{
+      min-height:80px;
+      display:grid;
+      grid-template-columns:auto 1fr auto;
+      align-items:center;
+      gap:18px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:0;
+    }
+
+    .brand-mark{
+      width:18px;
+      height:18px;
+      border-radius:999px;
+      background:linear-gradient(135deg, var(--accent), var(--accent-3));
+      box-shadow:
+        0 0 0 7px rgba(255,122,24,.10),
+        0 0 30px rgba(255,122,24,.18);
+      position:relative;
+      flex:0 0 auto;
+    }
+
+    .brand-mark::after{
+      content:"";
+      position:absolute;
+      inset:4px;
+      border-radius:999px;
+      background:rgba(255,255,255,.24);
+      filter:blur(1px);
+    }
+
+    .brand-copy{
+      display:flex;
+      flex-direction:column;
+      gap:1px;
+    }
+
+    .brand-name{
+      font-size:18px;
+      font-weight:800;
+      letter-spacing:.2px;
+    }
+
+    .brand-sub{
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.2;
+    }
+
+    nav{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:8px;
+      min-width:0;
+    }
+
+    nav a{
+      padding:10px 12px;
+      border-radius:999px;
+      color:var(--muted);
+      font-size:14px;
+      font-weight:700;
+      transition:background .18s ease, color .18s ease, transform .18s ease;
+      white-space:nowrap;
+    }
+
+    nav a:hover{
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      transform:translateY(-1px);
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      min-height:48px;
+      padding:12px 18px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      font-size:15px;
+      font-weight:800;
+      line-height:1.1;
+      text-align:center;
+      cursor:pointer;
+      transition:
+        transform .22s cubic-bezier(.2,.9,.2,1),
+        box-shadow .22s cubic-bezier(.2,.9,.2,1),
+        background .22s cubic-bezier(.2,.9,.2,1),
+        filter .22s cubic-bezier(.2,.9,.2,1);
+      box-shadow:0 10px 24px rgba(0,0,0,.16);
+      will-change:transform, box-shadow;
+    }
+
+    .btn:hover{
+      transform:translateY(-2px);
+      background:rgba(255,255,255,.10);
+      box-shadow:0 16px 30px rgba(0,0,0,.22);
+    }
+
+    .btn:active{
+      transform:translateY(0) scale(.975);
+    }
+
+    .btn.primary{
+      border:none;
+      color:#160b05;
+      background:linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow:
+        0 18px 38px rgba(255,122,24,.20),
+        0 0 0 1px rgba(255,255,255,.05) inset;
+    }
+
+    .btn.primary:hover{
+      filter:brightness(1.04);
+    }
+
+    .page-top{
+      padding:26px 0 14px;
+    }
+
+    .top-card{
+      padding:22px;
+    }
+
+    .top-grid{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:18px;
+      align-items:end;
+    }
+
+    h1{
+      margin:14px 0 8px;
+      font-size:clamp(34px, 5vw, 56px);
+      line-height:.96;
+      letter-spacing:-1.6px;
+      max-width:10ch;
+    }
+
+    .lead{
+      margin:0;
+      max-width:58ch;
+      color:var(--muted);
+      font-size:16px;
+    }
+
+    .mini-stats{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .stat-chip{
+      display:inline-flex;
+      flex-direction:column;
+      gap:2px;
+      min-width:110px;
+      padding:12px 14px;
+      border-radius:16px;
+      background:rgba(255,255,255,.045);
+      border:1px solid rgba(255,255,255,.08);
+    }
+
+    .stat-chip strong{
+      font-size:18px;
+      font-family:"Space Grotesk","Inter",sans-serif;
+    }
+
+    .stat-chip span{
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .filters{
+      margin-top:16px;
+      padding:16px;
+    }
+
+    .filters-grid{
+      display:grid;
+      grid-template-columns:1.45fr .85fr .85fr auto;
+      gap:12px;
+      align-items:center;
+    }
+
+    input, select{
+      width:100%;
+      min-height:52px;
+      padding:13px 14px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.055);
+      color:var(--text);
+      outline:none;
+      font:inherit;
+      transition:
+        border-color .2s ease,
+        box-shadow .2s ease,
+        background .2s ease,
+        transform .2s ease;
+    }
+
+    select{
+      appearance:none;
+      -webkit-appearance:none;
+      -moz-appearance:none;
+      padding-right:46px;
+      background-color:rgba(255,255,255,.055);
+      background-image:
+        linear-gradient(135deg, rgba(255,122,24,.18), rgba(255,77,141,.12)),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath fill='%23f3f5fb' d='M5.5 7.5a1 1 0 0 1 1.4 0L10 10.6l3.1-3.1a1 1 0 1 1 1.4 1.4l-3.8 3.8a1 1 0 0 1-1.4 0L5.5 8.9a1 1 0 0 1 0-1.4Z'/%3E%3C/svg%3E");
+      background-repeat:no-repeat, no-repeat;
+      background-position:center, right 14px center;
+      background-size:100% 100%, 18px 18px;
+      cursor:pointer;
+    }
+
+    select:hover{
+      background-color:rgba(255,255,255,.08);
+    }
+
+    select option{
+      background:#111827;
+      color:#f3f5fb;
+    }
+
+    select option:checked{
+      background:linear-gradient(135deg, var(--accent), var(--accent-2));
+      color:#ffffff;
+    }
+
+    select,
+    select option,
+    select optgroup{
+      font-family:"Space Grotesk","Inter",system-ui,sans-serif;
+    }
+
+    *{
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    input::placeholder{
+      color:rgba(184,192,210,.75);
+    }
+
+    input:focus, select:focus{
+      border-color:rgba(255,122,24,.40);
+      box-shadow:
+        0 0 0 4px rgba(255,122,24,.10),
+        0 10px 24px rgba(0,0,0,.16);
+      background:rgba(255,255,255,.08);
+      transform:translateY(-1px);
+    }
+
+    .toolbar-note{
+      margin-top:12px;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .quick-tags{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:14px;
+    }
+
+    .quick-tag{
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.05);
+      color:#ece4e0;
+      padding:10px 12px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:700;
+      cursor:pointer;
+      transition:transform .18s ease, background .18s ease;
+    }
+
+    .quick-tag:hover{
+      transform:translateY(-1px);
+      background:rgba(255,255,255,.08);
+    }
+
+    .section{
+      padding:8px 0 32px;
+    }
+
+    .section-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:end;
+      gap:16px;
+      flex-wrap:wrap;
+      margin-bottom:16px;
+    }
+
+    .section-head h2{
+      margin:0;
+      font-size:26px;
+      letter-spacing:-.5px;
+    }
+
+    .section-head p{
+      margin:0;
+      max-width:55ch;
+      color:var(--muted);
+      font-size:15px;
+    }
+
+    .count{
+      color:var(--muted);
+      font-size:14px;
+      margin-top:6px;
+    }
+
+    .list{
+      display:grid;
+      gap:16px;
+    }
+
+    .location-card{
+      padding:18px;
+    }
+
+    .location-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:16px;
+      flex-wrap:wrap;
+      margin-bottom:12px;
+    }
+
+    .location-title{
+      margin:0;
+      font-size:22px;
+      letter-spacing:-.4px;
+    }
+
+    .location-sub{
+      margin-top:5px;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.10);
+      color:var(--muted);
+      font-size:12px;
+      font-weight:700;
+      white-space:nowrap;
+    }
+
+    .table-wrap{
+      overflow:auto;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.03);
+    }
+
+    table{
+      width:100%;
+      min-width:760px;
+      border-collapse:collapse;
+    }
+
+    th, td{
+      text-align:left;
+      padding:13px 14px;
+      border-bottom:1px solid rgba(255,255,255,.07);
+      vertical-align:top;
+      font-size:14px;
+    }
+
+    th{
+      font-size:12px;
+      font-weight:800;
+      color:#d6dcec;
+      letter-spacing:.3px;
+      text-transform:uppercase;
+      background:rgba(255,255,255,.04);
+    }
+
+    tr:last-child td{
+      border-bottom:none;
+    }
+
+    tr:hover td{
+      background:rgba(255,255,255,.03);
+    }
+
+    .source-link{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      background:rgba(66,215,181,.10);
+      border:1px solid rgba(66,215,181,.16);
+      color:#dffcf4;
+      font-size:12px;
+      font-weight:800;
+      white-space:nowrap;
+    }
+
+    .empty{
+      padding:28px;
+      text-align:center;
+      color:var(--muted);
+      font-size:15px;
+    }
+
+    footer{
+      padding:28px 0 40px;
+      border-top:1px solid rgba(255,255,255,.07);
+      color:var(--muted);
+    }
+
+    .footer-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+    }
+
+    html.js body{
+      opacity:0;
+      transition:opacity .25s ease;
+    }
+
+    html.js body.loaded{
+      opacity:1;
+    }
+
+    html.js body.leaving{
+      opacity:0;
+    }
+
+    @media (max-width: 980px){
+      .nav{
+        grid-template-columns:auto auto;
+        justify-content:space-between;
+      }
+
+      nav{
+        display:none;
+      }
+
+      .top-grid,
+      .filters-grid{
+        grid-template-columns:1fr;
+      }
+
+      .mini-stats{
+        justify-content:flex-start;
+      }
+    }
+
+    @media (max-width: 720px){
+      .wrap{
+        width:min(var(--max), calc(100% - 22px));
+      }
+
+      .top-card,
+      .location-card{
+        padding:16px;
+      }
+
+      h1{
+        max-width:none;
+        letter-spacing:-1.2px;
+      }
+
+      .location-title{
+        font-size:20px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      html{ scroll-behavior:auto; }
+      *, *::before, *::after{
+        transition:none !important;
+        animation:none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="noise"></div>
+
+  <header>
+    <div class="wrap nav">
+      <a class="brand" href="index.html" aria-label="Back to Nexus home">
+        <div class="brand-mark"></div>
+        <div class="brand-copy">
+          <span class="brand-name">Nexus</span>
+          <span class="brand-sub">Sport starts with a connection</span>
+        </div>
+      </a>
+
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="groups.html">Groups</a>
+        <a href="schedules.html">Schedules</a>
+      </nav>
+
+      <a class="btn primary" href="groups.html">View groups</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-top">
+      <div class="wrap">
+        <div class="card top-card">
+          <div class="top-grid">
+            <div>
+              <div class="eyebrow">
+                <span class="dot"></span>
+                Schedules, locations, and pricing
+              </div>
+
+              <h1>Choose where to play.</h1>
+
+              <p class="lead">
+                Quickly browse locations, available sports, and price ranges
+                to organize an activity more easily with Nexus.
+              </p>
+            </div>
+
+            <div class="mini-stats">
+              <div class="stat-chip">
+                <strong id="statLocations">0</strong>
+                <span>locations</span>
+              </div>
+              <div class="stat-chip">
+                <strong id="statSports">0</strong>
+                <span>sports</span>
+              </div>
+              <div class="stat-chip">
+                <strong>1 page</strong>
+                <span>to compare</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="soft filters">
+            <div class="filters-grid">
+              <input id="q" type="text" placeholder="Search: tennis, badminton, arena, Robillard..." />
+              <select id="sportFilter">
+                <option value="">All sports</option>
+              </select>
+              <select id="locationFilter">
+                <option value="">All locations</option>
+              </select>
+              <button class="btn" id="resetBtn" type="button">Reset</button>
+            </div>
+
+            <div class="toolbar-note">
+              rM = Montreal resident • nrM = non-resident
+            </div>
+
+            <div class="quick-tags">
+              <button class="quick-tag" type="button" data-quick="Badminton">🏸 Badminton</button>
+              <button class="quick-tag" type="button" data-quick="Tennis">🎾 Tennis</button>
+              <button class="quick-tag" type="button" data-quick="Skating">⛸️ Skating</button>
+              <button class="quick-tag" type="button" data-quick="BdeB">🏫 BdeB</button>
+              <button class="quick-tag" type="button" data-quick="Claude-Robillard">📍 Robillard</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <h2>Browse schedules</h2>
+            <div class="count" id="count">0 location(s) shown</div>
+          </div>
+        </div>
+
+        <div id="content" class="list"></div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="wrap footer-row">
+        <div>© <span id="year"></span> Nexus • Schedules</div>
+        <div>
+          <a href="index.html">Home</a> • <a href="groups.html">Groups</a>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    const data = [
+      {
+        location: "Bois-de-Boulogne",
+        rows: [
+          { terrain: "Single gym", sport: "Multi", tarif: "$60–62.70 / hour", source: "https://complexesportif.bdeb.qc.ca/plateaux-sportifs-interieurs", precisions: "" },
+          { terrain: "Double gym", sport: "Multi", tarif: "$120–125.40 / hour", source: "", precisions: "" },
+          { terrain: "Multipurpose room", sport: "Multi", tarif: "$48–50.16 / hour", source: "", precisions: "" },
+        ]
+      },
+      {
+        location: "Claude-Robillard Sports Complex",
+        rows: [
+          { terrain: "Double gymnasium", sport: "Badminton", tarif: "$15.50 (rM) • $27 (nrM)", source: "https://montreal.ca/lieux/gymnase-double-du-complexe-sportif-claude-robillard", precisions: "" },
+          { terrain: "Outdoor tennis courts", sport: "Tennis", tarif: "$9.50–14.50", source: "https://montreal.ca/lieux/terrains-de-tennis-exterieurs-du-complexe-sportif-claude-robillard", precisions: "Outdoor" },
+          { terrain: "Indoor tennis courts", sport: "Tennis", tarif: "$14.50–24.50 (rM) • $25–45 (nrM)", source: "https://montreal.ca/lieux/terrains-de-tennis-interieurs-du-complexe-sportif-claude-robillard", precisions: "Indoor" },
+          { terrain: "Outdoor running track", sport: "Jogging", tarif: "$15.50 (rM) • $27 (nrM)", source: "https://montreal.ca/lieux/piste-de-course-exterieure-du-complexe-sportif-claude-robillard", precisions: "" },
+          { terrain: "Multi-sport hall", sport: "Multi", tarif: "$15.50 (rM) • $27 (nrM)", source: "https://montreal.ca/lieux/salle-omnisports-du-complexe-sportif-claude-robillard", precisions: "" },
+        ]
+      },
+      {
+        location: "Michel-Normandin Arena",
+        rows: [
+          { terrain: "Arena", sport: "Skating", tarif: "—", source: "https://montreal.ca/lieux/arena-michel-normandin", precisions: "" },
+        ]
+      },
+      {
+        location: "Bill-Durnan Arena",
+        rows: [
+          { terrain: "Rink", sport: "Skating", tarif: "$3.50 (rM) • $5.80 (nrM)", source: "https://montreal.ca/lieux/arena-bill-durnan", precisions: "Public skating Fri, Sat, Sun" },
+          { terrain: "Rink", sport: "Hockey", tarif: "$6.80 (rM) • $10.00 (nrM)", source: "https://montreal.ca/lieux/arena-bill-durnan", precisions: "Open hockey • free on Friday depending on availability" },
+        ]
+      },
+      {
+        location: "Martin-Luther-King Park",
+        rows: [
+          { terrain: "Outdoor courts", sport: "Tennis / Pickleball", tarif: "$1.80–15.80 (rM) • $2.70–16.30 (nrM) / person (1h)", source: "https://montreal.ca/lieux/terrains-de-tennis-et-de-pickleball-du-parc-martin-luther-king", precisions: "Free during certain periods" },
+        ]
+      },
+      {
+        location: "Warren-Allmand Park",
+        rows: [
+          { terrain: "Outdoor courts", sport: "Tennis / Pickleball", tarif: "$1.80–15.80 (rM) • $2.70–16.30 (nrM) / person (1h)", source: "https://montreal.ca/lieux/terrains-de-tennis-et-de-pickleball-du-parc-martin-luther-king", precisions: "Free during certain periods" },
+        ]
+      },
+      {
+        location: "Saint-Denis Recreation Centre",
+        rows: [
+          { terrain: "Gymnasium", sport: "Multi", tarif: "$60 (rental)", source: "https://montreal.ca/lieux/centre-de-loisirs-saint-denis", precisions: "" },
+          { terrain: "Multi-purpose rooms", sport: "Multi", tarif: "$25–30 (rental)", source: "", precisions: "" },
+        ]
+      },
+      {
+        location: "Mont-Royal Arena",
+        rows: [
+          { terrain: "Rink", sport: "Hockey / Skating", tarif: "$180–264 (private rental)", source: "https://montreal.ca/lieux/arena-mont-royal", precisions: "" },
+        ]
+      }
+    ];
+
+    const q = document.getElementById("q");
+    const sportFilter = document.getElementById("sportFilter");
+    const locationFilter = document.getElementById("locationFilter");
+    const content = document.getElementById("content");
+    const count = document.getElementById("count");
+    const resetBtn = document.getElementById("resetBtn");
+
+    function escapeHtml(s){
+      return String(s ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function uniqueSports(){
+      const set = new Set();
+      for(const section of data){
+        for(const row of section.rows){
+          set.add(row.sport);
+        }
+      }
+      return Array.from(set).sort((a, b) => a.localeCompare(b, "en"));
+    }
+
+    function uniqueLocations(){
+      return data.map(x => x.location).sort((a, b) => a.localeCompare(b, "en"));
+    }
+
+    function fillSelects(){
+      for(const sport of uniqueSports()){
+        const option = document.createElement("option");
+        option.value = sport;
+        option.textContent = sport;
+        sportFilter.appendChild(option);
+      }
+
+      for(const location of uniqueLocations()){
+        const option = document.createElement("option");
+        option.value = location;
+        option.textContent = location;
+        locationFilter.appendChild(option);
+      }
+
+      document.getElementById("statLocations").textContent = uniqueLocations().length;
+      document.getElementById("statSports").textContent = uniqueSports().length;
+    }
+
+    function render(){
+      const term = q.value.trim().toLowerCase();
+      const sportValue = sportFilter.value;
+      const locationValue = locationFilter.value;
+
+      const blocks = [];
+
+      for(const section of data){
+        if(locationValue && section.location !== locationValue) continue;
+
+        const rows = section.rows.filter(row => {
+          const blob = `${section.location} ${row.terrain} ${row.sport} ${row.tarif} ${row.precisions} ${row.source}`.toLowerCase();
+
+          if(term && !blob.includes(term)) return false;
+          if(sportValue && row.sport !== sportValue) return false;
+
+          return true;
+        });
+
+        if(!rows.length) continue;
+
+        const rowsHtml = rows.map(row => {
+          const sourceHtml = row.source
+            ? `<a class="source-link" href="${escapeHtml(row.source)}" target="_blank" rel="noopener">View source</a>`
+            : `<span style="color:rgba(184,192,210,.7)">—</span>`;
+
+          return `
+            <tr>
+              <td>${escapeHtml(row.terrain)}</td>
+              <td>${escapeHtml(row.sport)}</td>
+              <td>${escapeHtml(row.tarif)}</td>
+              <td>${sourceHtml}</td>
+              <td>${escapeHtml(row.precisions || "—")}</td>
+            </tr>
+          `;
+        }).join("");
+
+        blocks.push(`
+          <div class="card location-card">
+            <div class="location-top">
+              <div>
+                <h3 class="location-title">${escapeHtml(section.location)}</h3>
+                <div class="location-sub">Options found: ${rows.length}</div>
+              </div>
+              <div class="badge">${rows.length} option(s)</div>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Facility</th>
+                    <th>Sport</th>
+                    <th>Price</th>
+                    <th>Source</th>
+                    <th>Details</th>
+                  </tr>
+                </thead>
+                <tbody>${rowsHtml}</tbody>
+              </table>
+            </div>
+          </div>
+        `);
+      }
+
+      content.innerHTML = blocks.length
+        ? blocks.join("")
+        : `<div class="card empty">No results found. Try another keyword or reset the filters.</div>`;
+
+      count.textContent = `${blocks.length} location(s) shown`;
+    }
+
+    function resetFilters(){
+      q.value = "";
+      sportFilter.value = "";
+      locationFilter.value = "";
+      render();
+    }
+
+    fillSelects();
+    render();
+
+    q.addEventListener("input", render);
+    sportFilter.addEventListener("change", render);
+    locationFilter.addEventListener("change", render);
+    resetBtn.addEventListener("click", resetFilters);
+
+    document.querySelectorAll("[data-quick]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        q.value = btn.dataset.quick || "";
+        render();
+      });
+    });
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    window.addEventListener("DOMContentLoaded", () => {
+      document.body.classList.add("loaded");
+    });
+
+    document.addEventListener("click", (e) => {
+      const a = e.target.closest("a");
+      if(!a) return;
+
+      const href = a.getAttribute("href") || "";
+
+      if(href.startsWith("#")) return;
+      if(a.target === "_blank") return;
+      if(href.startsWith("http")) return;
+      if(href.startsWith("mailto:") || href.startsWith("tel:")) return;
+
+      e.preventDefault();
+      document.body.classList.add("leaving");
+      setTimeout(() => { window.location.href = href; }, 220);
+    });
+  </script>
+</body>
+</html>
