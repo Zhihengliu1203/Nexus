@@ -1,1 +1,1300 @@
+<!doctype html>
+<html lang="en-CA">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Join a group — Nexus</title>
+  <meta name="description" content="Join or create sports groups, filter, cost per person, chat." />
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#0e1016;
+      --card:#131a25;
+      --text:#f3f5fb;
+      --muted:#b8c0d2;
+      --line:#243042;
+      --accent:#ff7a18;
+      --accent2:#ff9a3d;
+      --accent3:#ffb15e;
+      --warn:#ffd36a;
+      --bad:#ff7e7e;
+      --ok:#42d7b5;
+      --radius:18px;
+      --shadow: 0 12px 30px rgba(0,0,0,.35);
+      --max: 1100px;
+
+      --select-bg: rgba(255,255,255,.055);
+      --select-bg-strong: rgba(255,255,255,.075);
+      --select-border: rgba(255,255,255,.12);
+      --option-bg:#1a130e;
+      --option-text:#fff4ea;
+    }
+
+    *{ box-sizing:border-box; }
+
+    html{
+      background:#0e1016;
+      color-scheme:dark;
+    }
+
+    body{
+      margin:0;
+      font-family:"Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background:
+        radial-gradient(900px 520px at 12% -10%, rgba(255,122,24,.17), transparent 55%),
+        radial-gradient(760px 440px at 88% 6%, rgba(255,77,141,.12), transparent 56%),
+        radial-gradient(620px 340px at 95% 95%, rgba(66,215,181,.10), transparent 54%),
+        linear-gradient(180deg, #0e1016 0%, #111722 55%, #0d1118 100%);
+      color: var(--text);
+      line-height:1.5;
+      text-align:left;
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+    }
+
+    a{ color:inherit; text-decoration:none; }
+    .wrap{ max-width: var(--max); margin: 0 auto; padding: 22px; }
+
+    header{
+      position: sticky; top: 0;
+      backdrop-filter: blur(14px);
+      background: rgba(14,16,22,.76);
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      z-index: 20;
+    }
+
+    .nav{
+      display:flex; align-items:center; justify-content:space-between;
+      gap: 16px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:800;
+      font-family:"Space Grotesk","Inter",system-ui,sans-serif;
+      letter-spacing:.2px;
+    }
+
+    .dot{
+      width:12px; height:12px; border-radius:999px;
+      background: linear-gradient(135deg, var(--accent), var(--accent3));
+      box-shadow:
+        0 0 0 4px rgba(255,122,24,.12),
+        0 0 18px rgba(255,122,24,.16);
+    }
+
+    nav{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    nav a{
+      padding:8px 10px;
+      border-radius:999px;
+      font-family:"Space Grotesk","Inter",system-ui,sans-serif;
+      font-weight:700;
+      transition: background .18s ease, color .18s ease, transform .18s ease;
+    }
+
+    nav a:hover{
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      transform: translateY(-1px);
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      gap:10px;
+      font-weight: 800;
+      font-family:"Space Grotesk","Inter",system-ui,sans-serif;
+      cursor: pointer;
+      user-select:none;
+      transition:
+        transform .18s ease,
+        background .18s ease,
+        box-shadow .18s ease,
+        filter .18s ease;
+      box-shadow: 0 10px 22px rgba(0,0,0,.14);
+    }
+
+    .btn:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.09);
+      box-shadow: 0 14px 28px rgba(0,0,0,.18);
+    }
+
+    .btn.primary{
+      border: none;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color:#1a0f08;
+      box-shadow: 0 14px 26px rgba(255,122,24,.20);
+    }
+
+    .btn.warn{
+      border: none;
+      background: linear-gradient(135deg, #ffe08a, #ffd36a, #ffb703);
+      color:#1a1200;
+    }
+
+    .btn.danger{
+      border: 1px solid rgba(255,126,126,.30);
+      background: rgba(255,126,126,.10);
+      color: #ffdede;
+    }
+
+    .btn.small{ padding: 8px 12px; font-size: 13px; }
+
+    .card{
+      background: rgba(19,26,37,.84);
+      border: 1px solid rgba(36,48,66,.92);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .top{
+      padding: 18px;
+      display:flex;
+      gap: 14px;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    h1{
+      margin:0;
+      font-size: 26px;
+      font-family:"Space Grotesk","Inter",system-ui,sans-serif;
+      letter-spacing:-.4px;
+    }
+
+    .nexus-title{
+      background: linear-gradient(135deg, #ff7a18 0%, #ff9a3d 55%, #ffb15e 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .sub{
+      margin-top:6px;
+      color: var(--muted);
+      font-size: 14px;
+      max-width: 75ch;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap: 14px;
+      margin-top: 14px;
+      align-items: start;
+    }
+
+    .toolbar{
+      padding: 14px 18px 18px;
+      border-top: 1px solid rgba(36,48,66,.72);
+      display:flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    .input, select, textarea{
+      transition:
+        background-color .18s cubic-bezier(.2,.9,.2,1),
+        border-color .18s cubic-bezier(.2,.9,.2,1),
+        box-shadow .18s cubic-bezier(.2,.9,.2,1),
+        transform .14s cubic-bezier(.2,.9,.2,1);
+      will-change: transform, box-shadow;
+      transform: translateZ(0);
+
+      flex: 1 1 220px;
+      padding: 12px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--select-border);
+      background: var(--select-bg);
+      color: var(--text);
+      outline: none;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: .2px;
+      font-family:"Inter",system-ui,sans-serif;
+    }
+
+    .input::placeholder, textarea::placeholder{
+      color: rgba(184,192,210,.62);
+      font-weight: 700;
+    }
+
+    select{
+      appearance:none;
+      -webkit-appearance:none;
+      -moz-appearance:none;
+      background-color: var(--select-bg-strong);
+      padding-right: 44px;
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath fill='%23d6deef' d='M5.5 7.5a1 1 0 0 1 1.4 0L10 10.6l3.1-3.1a1 1 0 1 1 1.4 1.4l-3.8 3.8a1 1 0 0 1-1.4 0L5.5 8.9a1 1 0 0 1 0-1.4Z'/%3E%3C/svg%3E");
+      background-repeat:no-repeat;
+      background-position:right 12px center;
+      background-size:18px 18px;
+    }
+
+    select option{
+      background: var(--option-bg);
+      color: var(--option-text);
+      font-weight: 700;
+    }
+
+    .input:hover, select:hover, textarea:hover{
+      background: rgba(255,255,255,.08);
+    }
+
+    .input:focus, select:focus, textarea:focus{
+      background: rgba(255,255,255,.09);
+      border-color: rgba(255,122,24,.42);
+      box-shadow: 0 0 0 4px rgba(255,122,24,.10);
+      transform: translateY(-1px) scale(1.012);
+    }
+
+    .input:active, select:active, textarea:active{
+      transform: translateY(0px) scale(1.006);
+    }
+
+    *{ -webkit-tap-highlight-color: transparent; }
+
+    @media (prefers-reduced-motion: reduce){
+      .input, select, textarea{ transition: none; }
+    }
+
+    textarea{ min-height: 90px; resize: vertical; }
+    .hint{ color: var(--muted); font-size: 13px; }
+
+    .pill{
+      display:inline-flex;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.045);
+      color: var(--muted);
+      font-size: 12px;
+      gap: 6px;
+      align-items:center;
+    }
+
+    .pill.ok{
+      border-color: rgba(66,215,181,.24);
+      background: rgba(66,215,181,.10);
+      color: #ddfff5;
+    }
+
+    .pill.warn{
+      border-color: rgba(255,211,106,.24);
+      background: rgba(255,211,106,.08);
+      color: #fff2d0;
+    }
+
+    .pill.bad{
+      border-color: rgba(255,126,126,.24);
+      background: rgba(255,126,126,.08);
+      color: #ffdede;
+    }
+
+    .list{ display:flex; flex-direction: column; gap: 12px; }
+    .group{ padding: 14px 16px; }
+
+    .groupHead{
+      display:flex;
+      justify-content: space-between;
+      align-items:flex-start;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .titleLine{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .gtitle{
+      font-size: 16px;
+      font-weight: 850;
+      letter-spacing: .2px;
+      font-family:"Space Grotesk","Inter",system-ui,sans-serif;
+    }
+
+    .meta{
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 13px;
+      display:flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items:center;
+    }
+
+    .actions{
+      display:flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items:center;
+      justify-content:flex-end;
+    }
+
+    details{
+      margin-top: 10px;
+      border-top: 1px solid rgba(255,255,255,.08);
+      padding-top: 10px;
+    }
+
+    summary{
+      cursor: pointer;
+      color: var(--muted);
+      font-weight: 700;
+      list-style: none;
+      font-family:"Space Grotesk","Inter",system-ui,sans-serif;
+    }
+
+    summary::-webkit-details-marker{ display:none; }
+
+    .detailGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .box{
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.04);
+    }
+
+    .box h3{
+      margin:0 0 6px;
+      font-size: 14px;
+      font-family:"Space Grotesk","Inter",system-ui,sans-serif;
+    }
+
+    .box p{
+      margin:0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .link{
+      color: var(--text);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .chat{
+      display:flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .chatLog{
+      max-height: 170px;
+      overflow:auto;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      padding: 10px;
+    }
+
+    .msg{
+      margin: 0 0 8px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .msg b{ color: var(--text); }
+
+    .toast{
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 18px;
+      background: rgba(16,24,39,.92);
+      border: 1px solid rgba(255,255,255,.12);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      z-index: 50;
+      display:none;
+      max-width: min(720px, 92vw);
+    }
+
+    footer{
+      margin-top: 18px;
+      padding: 18px 0 34px;
+      border-top: 1px solid rgba(36,48,66,.72);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 980px){
+      .grid{ grid-template-columns: 1fr; }
+      nav{ display:none; }
+      .detailGrid{ grid-template-columns: 1fr; }
+    }
+
+    html { background: #0e1016; }
+    body{
+      opacity: 0;
+      transition: opacity .25s ease;
+    }
+    body.loaded{ opacity: 1; }
+    body.leaving{ opacity: 0; }
+  </style>
+</head>
+<script>
+  window.addEventListener("DOMContentLoaded", () => {
+    document.body.classList.add("loaded");
+  });
+
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest("a");
+    if(!a) return;
+
+    const href = a.getAttribute("href") || "";
+
+    if(href.startsWith("#")) return;
+    if(a.target === "_blank") return;
+    if(href.startsWith("http")) return;
+    if(href.startsWith("mailto:") || href.startsWith("tel:")) return;
+
+    e.preventDefault();
+    document.body.classList.add("leaving");
+    setTimeout(() => { window.location.href = href; }, 220);
+  });
+</script>
+
+<body>
+  <header>
+    <div class="wrap nav">
+      <div class="brand">
+        <div class="dot"></div>
+        <div>Nexus</div>
+      </div>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="schedules.html">Schedules</a>
+        <a href="groups.html">Groups</a>
+      </nav>
+      <a class="btn" href="index.html">← Back</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="card">
+      <div class="top">
+        <div>
+          <h1 class="nexus-title">Join a group</h1>
+          <div class="sub">
+            Find a group (filters + search), join in 1 click, or create your own.
+          </div>
+        </div>
+
+        <div class="row" style="align-items:flex-start;">
+          <div style="min-width:280px">
+            <div class="hint" style="margin-bottom:6px;">Your first name (shown in groups)</div>
+            <input id="displayName" class="input" placeholder="E.g. Alex" />
+            <div class="row" style="margin-top:8px;">
+              <label class="pill" style="cursor:pointer;">
+                <input id="reminders" type="checkbox" style="accent-color: var(--accent);">
+                Enable “reminders”
+              </label>
+              <span class="pill ok" id="reliability">Reliability: 100</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <div class="row">
+          <input id="q" class="input" placeholder="Search (e.g. tennis, BdeB, Thursday, 18:00, free…)" />
+          <select id="sport">
+            <option value="">Sport (all)</option>
+            <option>Basketball</option>
+            <option>Volleyball</option>
+            <option>Badminton</option>
+            <option>Tennis</option>
+            <option>Pickleball</option>
+            <option>Skating</option>
+            <option>Hockey</option>
+            <option>Multi</option>
+          </select>
+          <select id="niveau">
+            <option value="">Level (all)</option>
+            <option>Beginner</option>
+            <option>Intermediate</option>
+            <option>Advanced</option>
+            <option>Mixed</option>
+          </select>
+          <select id="statut">
+            <option value="">Status (all)</option>
+            <option value="open">Open</option>
+            <option value="full">Full</option>
+            <option value="confirmed">Confirmed</option>
+          </select>
+        </div>
+
+        <div class="row">
+          <select id="lieu">
+            <option value="">Location (all)</option>
+            <option>BdeB</option>
+            <option>Claude-Robillard</option>
+            <option>Bill-Durnan Arena</option>
+            <option>Michel-Normandin Arena</option>
+            <option>Mont-Royal Arena</option>
+            <option>Martin-Luther-King Park</option>
+            <option>Warren-Allmand Park</option>
+            <option>Saint-Denis Centre</option>
+          </select>
+
+          <select id="jour">
+            <option value="">Day (all)</option>
+            <option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option>
+            <option>Friday</option><option>Saturday</option><option>Sunday</option>
+          </select>
+
+          <select id="prix">
+            <option value="">Price/person (all)</option>
+            <option value="0-5">$0–5</option>
+            <option value="5-10">$5–10</option>
+            <option value="10-20">$10–20</option>
+            <option value="20-999">$20+</option>
+          </select>
+
+          <button class="btn small" id="reset">Reset filters</button>
+          <button class="btn small danger" id="wipe">Clear demo</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <section>
+        <div class="card" style="padding:14px 16px; margin-bottom:12px;">
+          <div class="row" style="justify-content:space-between;">
+            <div>
+              <div class="gtitle">Available groups</div>
+              <div class="hint" id="count"></div>
+            </div>
+            <div class="row">
+              <span class="pill ok">Open</span>
+              <span class="pill warn">Full / waiting</span>
+              <span class="pill">Confirmed</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="list" id="groups"></div>
+      </section>
+
+      <aside class="card" style="padding:14px 16px;">
+        <div class="gtitle">Create a group</div>
+        <div class="hint" style="margin-top:6px;"></div>
+
+        <div class="row" style="margin-top:12px;">
+          <input class="input" id="title" placeholder="Title (e.g. Badminton Thursday 18:00)" />
+        </div>
+
+        <div class="row">
+          <select id="cSport">
+            <option>Badminton</option><option>Basketball</option><option>Volleyball</option><option>Tennis</option>
+            <option>Pickleball</option><option>Skating</option><option>Hockey</option><option>Multi</option>
+          </select>
+          <select id="cNiveau">
+            <option>Beginner</option><option>Intermediate</option><option>Advanced</option><option>Mixed</option>
+          </select>
+        </div>
+
+        <div class="row">
+          <select id="cLieu">
+            <option>BdeB</option>
+            <option>Claude-Robillard</option>
+            <option>Saint-Denis Centre</option>
+            <option>Bill-Durnan Arena</option>
+            <option>Martin-Luther-King Park</option>
+            <option>Warren-Allmand Park</option>
+            <option>Mont-Royal Arena</option>
+            <option>Michel-Normandin Arena</option>
+          </select>
+          <select id="cJour">
+            <option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option>
+            <option>Friday</option><option>Saturday</option><option>Sunday</option>
+          </select>
+        </div>
+
+        <div class="row">
+          <input class="input" id="cHeure" placeholder="Time (e.g. 18:00)" />
+          <input class="input" id="cDuree" placeholder="Duration (h) (e.g. 1.5)" />
+        </div>
+
+        <div class="row">
+          <input class="input" id="cPlaces" placeholder="Max spots (e.g. 10)" />
+          <input class="input" id="cCost" placeholder="Total cost (e.g. 60)" />
+        </div>
+
+        <div class="row">
+          <input class="input" id="cFee" placeholder="Platform fee / person (e.g. 1.00)" />
+        </div>
+
+        <div class="row">
+          <textarea id="cNotes" placeholder="Notes (level, equipment, rules, meeting point...)"></textarea>
+        </div>
+
+        <div class="row" style="justify-content:space-between;">
+          <button class="btn warn" id="create">✨ Create group</button>
+          <button class="btn small" id="seed">Add demos</button>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const KEY = "nexus_groups_en_v1";
+    const USERKEY = "nexus_user_en_v1";
+    const REMKEY = "nexus_reminders_en_v1";
+    const RELKEY = "nexus_reliability_en_v1";
+
+    const $ = (id) => document.getElementById(id);
+
+    function loadGroups(){
+      try { return JSON.parse(localStorage.getItem(KEY) || "[]"); }
+      catch { return []; }
+    }
+    function saveGroups(groups){
+      localStorage.setItem(KEY, JSON.stringify(groups));
+    }
+    function loadUser(){
+      try { return JSON.parse(localStorage.getItem(USERKEY) || "{}"); }
+      catch { return {}; }
+    }
+    function saveUser(u){
+      localStorage.setItem(USERKEY, JSON.stringify(u));
+    }
+    function loadReliability(){
+      try { return JSON.parse(localStorage.getItem(RELKEY) || '{"noShow":0}'); }
+      catch { return { noShow: 0 }; }
+    }
+    function uid(){
+      return Math.random().toString(16).slice(2) + Date.now().toString(16);
+    }
+
+    let toastTimer = null;
+    function toast(msg){
+      const t = $("toast");
+      t.textContent = msg;
+      t.style.display = "block";
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.style.display = "none", 2400);
+    }
+
+    function escapeHtml(s){
+      return String(s ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function money(n){
+      const x = Number(n);
+      if(!isFinite(x)) return "—";
+      return x.toFixed(2) + " $";
+    }
+
+    function calcPerPerson(totalCost, feePerPerson, max){
+      const t = Number(totalCost), f = Number(feePerPerson), m = Number(max);
+      if(!isFinite(t) || !isFinite(f) || !isFinite(m) || m <= 0) return null;
+      return (t / m) + f;
+    }
+
+    function statusOf(g){
+      const max = g.max || 0;
+      const joined = (g.participants || []).length;
+      const threshold = Math.max(2, Math.ceil(max * (g.confirmThreshold ?? 0.7)));
+      const confirmed = joined >= threshold;
+      const full = joined >= max;
+      return { confirmed, full, joined, max, threshold };
+    }
+
+    function seedIfEmpty(){
+      const groups = loadGroups();
+      if(groups.length) return;
+
+      const demo = [
+        {
+          id: uid(),
+          title: "Badminton Thursday 6 PM (Claude-Robillard)",
+          sport: "Badminton",
+          niveau: "Intermediate",
+          lieu: "Claude-Robillard",
+          jour: "Thursday",
+          heure: "18:00",
+          dureeH: 1.0,
+          max: 8,
+          costTotal: 27,
+          feePerPerson: 1.00,
+          confirmThreshold: 0.7,
+          notes: "Rackets required. rM/nrM depending on your status.",
+          source: "https://montreal.ca/lieux/gymnase-double-du-complexe-sportif-claude-robillard",
+          owner: "Admin",
+          participants: ["Admin", "Kaeli"],
+          waitlist: ["Jake"],
+          chat: [{ by: "Admin", text: "Hi! Tell us your level and whether you have a racket.", ts: Date.now()-600000 }],
+          createdAt: Date.now()-7200000
+        },
+        {
+          id: uid(),
+          title: "Tennis Saturday 2 PM (Martin-Luther-King Park)",
+          sport: "Tennis",
+          niveau: "Mixed",
+          lieu: "Martin-Luther-King Park",
+          jour: "Saturday",
+          heure: "14:00",
+          dureeH: 1.0,
+          max: 4,
+          costTotal: 12,
+          feePerPerson: 0.50,
+          confirmThreshold: 0.75,
+          notes: "If it is free during certain periods, the cost can be adjusted to 0.",
+          source: "https://montreal.ca/lieux/terrains-de-tennis-et-de-pickleball-du-parc-martin-luther-king",
+          owner: "Admin",
+          participants: ["Admin"],
+          waitlist: [],
+          chat: [],
+          createdAt: Date.now()-3600000
+        },
+        {
+          id: uid(),
+          title: "Multi gym Tuesday 7 PM (BdeB)",
+          sport: "Multi",
+          niveau: "Mixed",
+          lieu: "BdeB",
+          jour: "Tuesday",
+          heure: "19:00",
+          dureeH: 1.5,
+          max: 10,
+          costTotal: 62.70,
+          feePerPerson: 1.00,
+          confirmThreshold: 0.7,
+          notes: "Bring clean shoes.",
+          source: "https://complexesportif.bdeb.qc.ca/plateaux-sportifs-interieurs",
+          owner: "Admin",
+          participants: ["Admin","Lashwana","Zhiheng","Jake","Kaeli","Amina","Sam"],
+          waitlist: [],
+          chat: [],
+          createdAt: Date.now()-5200000
+        }
+      ];
+      saveGroups(demo);
+    }
+
+    function renderChat(chat){
+      if(!chat || !chat.length) return `<p class="msg">No messages.</p>`;
+      return chat.slice(-40).map(m => {
+        const when = new Date(m.ts || Date.now()).toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"});
+        return `<p class="msg"><b>${escapeHtml(m.by || "?")}</b> <span style="opacity:.7">(${when})</span> : ${escapeHtml(m.text || "")}</p>`;
+      }).join("");
+    }
+
+    function renderMyGroups(groups, name){
+      const box = $("myGroups");
+      if(!box) return;
+
+      if(!name){
+        box.innerHTML = `<div class="hint">Enter your first name to see your groups.</div>`;
+        return;
+      }
+      const mine = groups.filter(g => (g.participants || []).includes(name) || (g.waitlist || []).includes(name));
+      if(!mine.length){
+        box.innerHTML = `<div class="hint">No joined group for now.</div>`;
+        return;
+      }
+      box.innerHTML = mine.map(g => {
+        const st = statusOf(g);
+        const tag = (g.participants || []).includes(name) ? "Participant" : "Waiting";
+        const pill = tag === "Participant" ? "ok" : "warn";
+        return `
+          <div class="box">
+            <div style="display:flex; justify-content:space-between; gap:8px; flex-wrap:wrap;">
+              <div>
+                <div style="font-weight:850;">${escapeHtml(g.title)}</div>
+                <div class="hint">${escapeHtml(g.jour)} ${escapeHtml(g.heure)} • ${escapeHtml(g.lieu)} • ${st.joined}/${st.max}</div>
+              </div>
+              <span class="pill ${pill}">${tag}</span>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function getName(){
+      const u = loadUser();
+      return (u.name || "").trim();
+    }
+
+    function joinGroup(id){
+      const name = getName();
+      if(!name) return toast("Enter your first name first.");
+
+      const groups = loadGroups();
+      const g = groups.find(x => x.id === id);
+      if(!g) return;
+
+      g.participants = g.participants || [];
+      g.waitlist = g.waitlist || [];
+
+      if(g.participants.includes(name)) return toast("You are already in this group.");
+      if(g.waitlist.includes(name)) return toast("You are already on the waiting list.");
+
+      const st = statusOf(g);
+      if(st.full){
+        g.waitlist.push(name);
+        saveGroups(groups);
+        toast("Group is full → added to the waiting list.");
+        render();
+        return;
+      }
+
+      g.participants.push(name);
+      saveGroups(groups);
+      toast("✅ Joined!");
+
+      const st2 = statusOf(g);
+      if(st2.confirmed){
+        g.chat = g.chat || [];
+        g.chat.push({ by: "System", text: "🎉 Group confirmed!", ts: Date.now() });
+        saveGroups(groups);
+      }
+      render();
+    }
+
+    function toggleWait(id){
+      const name = getName();
+      if(!name) return toast("Enter your first name first.");
+
+      const groups = loadGroups();
+      const g = groups.find(x => x.id === id);
+      if(!g) return;
+
+      g.waitlist = g.waitlist || [];
+      const i = g.waitlist.indexOf(name);
+      if(i >= 0){
+        g.waitlist.splice(i,1);
+        saveGroups(groups);
+        toast("Removed from the waiting list.");
+        render();
+        return;
+      }
+      g.waitlist.push(name);
+      saveGroups(groups);
+      toast("Added to the waiting list.");
+      render();
+    }
+
+    function leaveGroup(id){
+      const name = getName();
+      if(!name) return toast("Enter your first name first.");
+
+      const groups = loadGroups();
+      const g = groups.find(x => x.id === id);
+      if(!g) return;
+
+      g.participants = g.participants || [];
+      g.waitlist = g.waitlist || [];
+
+      const wasIn = g.participants.includes(name);
+      g.participants = g.participants.filter(p => p !== name);
+      g.waitlist = g.waitlist.filter(p => p !== name);
+
+      const st = statusOf(g);
+      if(!st.full && g.waitlist.length > 0){
+        const next = g.waitlist.shift();
+        g.participants.push(next);
+        g.chat = g.chat || [];
+        g.chat.push({ by: "System", text: `✅ ${next} was moved from the waiting list (spot opened).`, ts: Date.now() });
+        toast(`You left. ${next} joined from the waiting list.`);
+      } else {
+        toast(wasIn ? "You left the group." : "Removed.");
+      }
+
+      saveGroups(groups);
+      render();
+    }
+
+    async function copyText(text){
+      try{
+        await navigator.clipboard.writeText(text);
+        toast("Copied ✅");
+      } catch {
+        toast("Copy unavailable (browser).");
+      }
+    }
+
+    function sendMessage(id){
+      const name = getName();
+      if(!name) return toast("Enter your first name first.");
+
+      const input = $("msg-" + id);
+      if(!input) return;
+      const text = input.value.trim();
+      if(!text) return;
+
+      const groups = loadGroups();
+      const g = groups.find(x => x.id === id);
+      if(!g) return;
+
+      g.chat = g.chat || [];
+      g.chat.push({ by: name, text, ts: Date.now() });
+      saveGroups(groups);
+      input.value = "";
+      render();
+      toast("Message sent.");
+    }
+
+    function shareGroup(id){
+      const groups = loadGroups();
+      const g = groups.find(x => x.id === id);
+      if(!g) return;
+
+      const text = `Group: ${g.title} | Day: ${g.jour} ${g.heure} | Location: ${g.lieu} | Sport: ${g.sport} | Level: ${g.niveau}`;
+      copyText(text);
+    }
+
+    function resetFilters(){
+      $("q").value = "";
+      $("sport").value = "";
+      $("niveau").value = "";
+      $("lieu").value = "";
+      $("jour").value = "";
+      $("statut").value = "";
+      $("prix").value = "";
+      render();
+    }
+
+    function wipeDemo(){
+      localStorage.removeItem(KEY);
+      toast("Demo data cleared.");
+      render();
+    }
+
+    function createGroup(){
+      const name = getName();
+      if(!name) return toast("Enter your first name first.");
+
+      const title = $("title").value.trim();
+      const sport = $("cSport").value;
+      const niveau = $("cNiveau").value;
+      const lieu = $("cLieu").value;
+      const jour = $("cJour").value;
+      const heure = $("cHeure").value.trim() || "18:00";
+      const dureeH = Number($("cDuree").value || 1);
+      const max = Number($("cPlaces").value || 10);
+      const costTotal = Number($("cCost").value || 0);
+      const feePerPerson = Number($("cFee").value || 0);
+      const notes = $("cNotes").value.trim();
+
+      if(!max || max < 2) return toast("Max spots must be ≥ 2.");
+      if(!isFinite(costTotal)) return toast("Invalid total cost.");
+      if(!isFinite(feePerPerson)) return toast("Invalid fee/person.");
+
+      const g = {
+        id: uid(),
+        title: title || `${sport} ${jour} ${heure} (${lieu})`,
+        sport, niveau, lieu, jour, heure,
+        dureeH: isFinite(dureeH) ? dureeH : 1,
+        max,
+        costTotal,
+        feePerPerson,
+        confirmThreshold: 0.7,
+        notes,
+        source: "",
+        owner: name,
+        participants: [name],
+        waitlist: [],
+        chat: [{ by: "System", text: "Group created ✅. Share it to attract players.", ts: Date.now() }],
+        createdAt: Date.now()
+      };
+
+      const groups = loadGroups();
+      groups.unshift(g);
+      saveGroups(groups);
+
+      $("title").value = "";
+      $("cHeure").value = "";
+      $("cDuree").value = "";
+      $("cPlaces").value = "";
+      $("cCost").value = "";
+      $("cFee").value = "";
+      $("cNotes").value = "";
+
+      toast("✨ Group created!");
+      render();
+    }
+
+    function syncUserUI(){
+      const u = loadUser();
+      $("displayName").value = u.name || "";
+      const rem = localStorage.getItem(REMKEY) === "1";
+      $("reminders").checked = rem;
+
+      const rel = loadReliability();
+      const score = Math.max(0, 100 - (rel.noShow || 0) * 20);
+      $("reliability").textContent = "Reliability: " + score;
+    }
+
+    function render(){
+      const groups = loadGroups();
+      const user = loadUser();
+      const name = (user.name || "").trim();
+
+      const q = $("q").value.trim().toLowerCase();
+      const fSport = $("sport").value;
+      const fNiv = $("niveau").value;
+      const fLieu = $("lieu").value;
+      const fJour = $("jour").value;
+      const fStatut = $("statut").value;
+      const fPrix = $("prix").value;
+
+      const filtered = groups.filter(g => {
+        const blob = `${g.title} ${g.sport} ${g.niveau} ${g.lieu} ${g.jour} ${g.heure} ${g.notes} ${g.source}`.toLowerCase();
+        if(q && !blob.includes(q)) return false;
+        if(fSport && g.sport !== fSport) return false;
+        if(fNiv && g.niveau !== fNiv) return false;
+        if(fLieu && g.lieu !== fLieu) return false;
+        if(fJour && g.jour !== fJour) return false;
+
+        const per = calcPerPerson(g.costTotal, g.feePerPerson, g.max);
+        if(fPrix && per != null){
+          const [a,b] = fPrix.split("-").map(Number);
+          if(!(per >= a && per < b)) return false;
+        } else if (fPrix) {
+          return false;
+        }
+
+        const st = statusOf(g);
+        if(fStatut === "open" && st.joined >= st.max) return false;
+        if(fStatut === "full" && !st.full) return false;
+        if(fStatut === "confirmed" && !st.confirmed) return false;
+
+        return true;
+      });
+
+      $("count").textContent = `${filtered.length} group(s) shown • ${groups.length} total`;
+
+      renderMyGroups(groups, name);
+
+      const container = $("groups");
+      container.innerHTML = filtered.length ? "" : `
+        <div class="card group">
+          <div class="gtitle">No group found</div>
+          <div class="hint" style="margin-top:6px;">Try another filter, or create a group on the right.</div>
+        </div>
+      `;
+
+      for(const g of filtered){
+        const st = statusOf(g);
+        const per = calcPerPerson(g.costTotal, g.feePerPerson, g.max);
+        const isIn = name && (g.participants || []).includes(name);
+        const isWait = name && (g.waitlist || []).includes(name);
+
+        let statusPill = `<span class="pill ok">Open</span>`;
+        if(st.full) statusPill = `<span class="pill warn">Full</span>`;
+        if(st.confirmed) statusPill = `<span class="pill">Confirmed</span>`;
+
+        const joinBtn = !name
+          ? `<span class="pill bad">Enter your first name to join</span>`
+          : isIn
+            ? `<button class="btn small danger" data-act="leave" data-id="${g.id}">Leave</button>`
+            : (st.full
+                ? `<button class="btn small warn" data-act="wait" data-id="${g.id}">${isWait ? "Leave waiting list" : "Waiting list"}</button>`
+                : `<button class="btn small primary" data-act="join" data-id="${g.id}">Join</button>`);
+
+        const shareText = `Group: ${g.title} | Day: ${g.jour} ${g.heure} | Location: ${g.lieu} | Sport: ${g.sport} | Level: ${g.niveau}`;
+
+        const sourceLink = g.source
+          ? `<a class="link" href="${escapeHtml(g.source)}" target="_blank" rel="noopener">Source</a>`
+          : `<span style="color:rgba(183,196,221,.7)">—</span>`;
+
+        const html = `
+          <div class="card group">
+            <div class="groupHead">
+              <div>
+                <div class="titleLine">
+                  <span class="gtitle">${escapeHtml(g.title || `${g.sport} ${g.jour} ${g.heure}`)}</span>
+                  ${statusPill}
+                  <span class="pill">${escapeHtml(g.sport)}</span>
+                  <span class="pill">${escapeHtml(g.niveau)}</span>
+                  <span class="pill">${escapeHtml(g.lieu)}</span>
+                </div>
+                <div class="meta">
+                  <span>🗓️ ${escapeHtml(g.jour)} • 🕒 ${escapeHtml(g.heure)} • ⏱️ ${escapeHtml(g.dureeH)}h</span>
+                  <span>👥 ${st.joined}/${st.max} (confirmed at ${st.threshold})</span>
+                  <span>💰 ${per == null ? "—" : money(per)} / person</span>
+                  <span>🔗 ${sourceLink}</span>
+                </div>
+              </div>
+
+              <div class="actions">
+                ${joinBtn}
+                <button class="btn small" data-act="share" data-id="${g.id}">Share</button>
+              </div>
+            </div>
+
+            <details>
+              <summary>View details + chat</summary>
+
+              <div class="detailGrid">
+                <div class="box">
+                  <h3>Notes / rules</h3>
+                  <p>${escapeHtml(g.notes || "—")}</p>
+                  <p style="margin-top:8px;">
+                    <span class="pill">Organizer: ${escapeHtml(g.owner || "—")}</span>
+                    <span class="pill">Total cost: ${money(g.costTotal)} • Fee/person: ${money(g.feePerPerson)}</span>
+                  </p>
+                </div>
+
+                <div class="box">
+                  <h3>Participants</h3>
+                  <p>${escapeHtml((g.participants || []).join(", ") || "—")}</p>
+                  <p style="margin-top:8px;">
+                    <span class="pill warn">Waiting: ${escapeHtml((g.waitlist || []).join(", ") || "—")}</span>
+                  </p>
+                </div>
+              </div>
+
+              <div class="box" style="margin-top:12px;">
+                <h3>Chat (mini)</h3>
+                <div class="chat">
+                  <div class="chatLog" id="log-${g.id}">
+                    ${renderChat(g.chat || [])}
+                  </div>
+                  <div class="row">
+                    <input class="input" id="msg-${g.id}" placeholder="Write a message…" />
+                    <button class="btn small" data-act="send" data-id="${g.id}">Send</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="box" style="margin-top:12px;">
+                <h3>Share (copy)</h3>
+                <p class="hint" style="margin-bottom:10px;">Copy this text for Instagram/DM:</p>
+                <div class="row">
+                  <input class="input" value="${escapeHtml(shareText)}" readonly />
+                  <button class="btn small" data-act="copy" data-text="${escapeHtml(shareText)}">Copy</button>
+                </div>
+              </div>
+            </details>
+          </div>
+        `;
+        container.insertAdjacentHTML("beforeend", html);
+      }
+    }
+
+    function init(){
+      seedIfEmpty();
+      syncUserUI();
+      render();
+
+      ["q","sport","niveau","lieu","jour","statut","prix"].forEach(id => {
+        $(id).addEventListener("input", render);
+        $(id).addEventListener("change", render);
+      });
+
+      $("reset").addEventListener("click", resetFilters);
+      $("wipe").addEventListener("click", wipeDemo);
+
+      $("displayName").addEventListener("input", (e) => {
+        const u = loadUser();
+        u.name = e.target.value;
+        saveUser(u);
+        render();
+      });
+
+      $("reminders").addEventListener("change", (e) => {
+        localStorage.setItem(REMKEY, e.target.checked ? "1" : "0");
+        toast(e.target.checked ? "Reminders enabled (MVP)." : "Reminders disabled.");
+      });
+
+      $("create").addEventListener("click", createGroup);
+      $("seed").addEventListener("click", () => {
+        localStorage.removeItem(KEY);
+        seedIfEmpty();
+        toast("Demo data added.");
+        render();
+      });
+
+      document.addEventListener("click", (e) => {
+        const el = e.target.closest("[data-act]");
+        if(!el) return;
+
+        const act = el.getAttribute("data-act");
+        const id = el.getAttribute("data-id");
+
+        if(act === "join") joinGroup(id);
+        if(act === "leave") leaveGroup(id);
+        if(act === "wait") toggleWait(id);
+        if(act === "send") sendMessage(id);
+        if(act === "share") shareGroup(id);
+        if(act === "copy") copyText(el.getAttribute("data-text") || "");
+      });
+    }
+
+    init();
+  </script>
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+      document.body.classList.add("loaded");
+    });
+
+    document.addEventListener("click", (e) => {
+      const a = e.target.closest("a");
+      if(!a) return;
+
+      const href = a.getAttribute("href") || "";
+
+      if(href.startsWith("#")) return;
+      if(a.target === "_blank") return;
+      if(href.startsWith("http")) return;
+      if(href.startsWith("mailto:") || href.startsWith("tel:")) return;
+
+      e.preventDefault();
+      document.body.classList.add("leaving");
+      setTimeout(() => { window.location.href = href; }, 220);
+    });
+  </script>
+
+</body>
+</html>
