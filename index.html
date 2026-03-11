@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en-CA">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nexus — Choose your language</title>
+  <meta name="description" content="Choose French or English to enter the Nexus website." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#0d0f14;
+      --text:#f4f6fb;
+      --muted:#bfc6d7;
+      --accent:#ff7a18;
+      --accent-2:#ff4d8d;
+      --accent-3:#44d7b6;
+      --line:rgba(255,255,255,.08);
+      --shadow:0 24px 60px rgba(0,0,0,.34);
+      --radius:28px;
+      --radius-sm:18px;
+      --max:980px;
+    }
+
+    *{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      color:var(--text);
+      font-family:"Inter", system-ui, sans-serif;
+      background:
+        radial-gradient(700px 420px at 10% -10%, rgba(255,122,24,.18), transparent 60%),
+        radial-gradient(820px 460px at 88% 0%, rgba(255,77,141,.18), transparent 58%),
+        radial-gradient(560px 360px at 78% 72%, rgba(68,215,182,.14), transparent 56%),
+        linear-gradient(180deg, #0d0f14 0%, #11141b 48%, #0d1016 100%);
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+      padding:22px;
+    }
+
+    .card{
+      width:min(var(--max), 100%);
+      padding:34px;
+      border-radius:var(--radius);
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(24,29,40,.92), rgba(17,21,30,.96));
+      box-shadow:var(--shadow);
+      text-align:center;
+    }
+
+    .brand{
+      display:inline-flex;
+      align-items:center;
+      gap:12px;
+      margin-bottom:18px;
+      font-family:"Space Grotesk","Inter",system-ui,sans-serif;
+      font-weight:800;
+      font-size:24px;
+    }
+
+    .dot{
+      width:16px;
+      height:16px;
+      border-radius:999px;
+      background:linear-gradient(135deg, var(--accent), var(--accent-3));
+      box-shadow:0 0 0 7px rgba(255,122,24,.10);
+    }
+
+    h1{
+      margin:0 0 10px;
+      font-family:"Space Grotesk","Inter",system-ui,sans-serif;
+      font-size:clamp(32px, 5vw, 54px);
+      line-height:1;
+      letter-spacing:-1.4px;
+    }
+
+    p{
+      margin:0 auto;
+      max-width:58ch;
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.55;
+    }
+
+    .actions{
+      display:flex;
+      justify-content:center;
+      gap:14px;
+      flex-wrap:wrap;
+      margin-top:26px;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:210px;
+      min-height:56px;
+      padding:14px 20px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      text-decoration:none;
+      font-family:"Space Grotesk","Inter",system-ui,sans-serif;
+      font-weight:800;
+      font-size:16px;
+      transition:transform .18s ease, background .18s ease, box-shadow .18s ease;
+      box-shadow:0 10px 24px rgba(0,0,0,.16);
+    }
+
+    .btn:hover{
+      transform:translateY(-2px);
+      background:rgba(255,255,255,.10);
+    }
+
+    .btn.primary{
+      border:none;
+      color:#140b05;
+      background:linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow:0 18px 38px rgba(255,122,24,.20);
+    }
+
+    .btn.secondary{
+      border:none;
+      color:#081510;
+      background:linear-gradient(135deg, #b8ffe7, var(--accent-3));
+      box-shadow:0 18px 38px rgba(68,215,182,.16);
+    }
+
+    .small{
+      margin-top:18px;
+      font-size:13px;
+      color:var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="brand">
+      <div class="dot"></div>
+      <span>Nexus</span>
+    </div>
+
+    <h1>Choose your language</h1>
+    <p>Choisis la version du site que tu veux utiliser.</p>
+
+    <div class="actions">
+      <a class="btn primary" href="fr/index.html">Français</a>
+      <a class="btn secondary" href="en/index.html">English</a>
+    </div>
+
+    <div class="small">Nexus • Student sports platform</div>
+  </div>
+</body>
+</html>
