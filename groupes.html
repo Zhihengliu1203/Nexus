@@ -1,0 +1,1682 @@
+<!doctype html>
+<html lang="fr-CA">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nexus — Groupes sportifs</title>
+  <meta name="description" content="Rejoins ou crée un groupe sportif avec Nexus. Filtre par sport, niveau, horaire et partage les coûts plus facilement." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    document.documentElement.classList.add("js");
+  </script>
+
+  <style>
+    :root{
+      --bg:#0e1016;
+      --bg-2:#141923;
+      --panel:#151b27;
+      --panel-2:#101621;
+      --text:#f3f5fb;
+      --muted:#b8c0d2;
+      --line:rgba(255,255,255,.08);
+      --line-strong:rgba(255,255,255,.14);
+
+      --accent:#ff7a18;
+      --accent-2:#ff4d8d;
+      --accent-3:#42d7b5;
+      --accent-4:#7fd8ff;
+
+      --warn:#ffd36a;
+      --danger:#ff7e7e;
+      --success:#42d7b5;
+
+      --shadow:0 20px 50px rgba(0,0,0,.35);
+      --shadow-soft:0 12px 30px rgba(0,0,0,.22);
+
+      --radius:24px;
+      --radius-md:18px;
+      --radius-sm:14px;
+      --max:1180px;
+    }
+
+    html{
+      scroll-behavior:smooth;
+      background:var(--bg);
+      color-scheme:dark;
+    }
+
+    *{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      color:var(--text);
+      font-family:"Inter",system-ui,sans-serif;
+      line-height:1.55;
+      background:
+        radial-gradient(680px 380px at 0% -10%, rgba(255,122,24,.16), transparent 60%),
+        radial-gradient(760px 420px at 100% 0%, rgba(255,77,141,.12), transparent 58%),
+        radial-gradient(560px 340px at 85% 100%, rgba(66,215,181,.10), transparent 56%),
+        linear-gradient(180deg, #0e1016 0%, #121720 52%, #0d1118 100%);
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+    }
+
+    .noise{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      opacity:.03;
+      z-index:0;
+      background-image:
+        radial-gradient(circle at 20% 20%, #fff 0 1px, transparent 1px),
+        radial-gradient(circle at 70% 40%, #fff 0 1px, transparent 1px),
+        radial-gradient(circle at 40% 80%, #fff 0 1px, transparent 1px),
+        radial-gradient(circle at 85% 90%, #fff 0 1px, transparent 1px);
+      background-size:180px 180px;
+    }
+
+    a{
+      color:inherit;
+      text-decoration:none;
+    }
+
+    .title-font,
+    h1,h2,h3,
+    .brand-name,
+    .btn,
+    nav a,
+    summary{
+      font-family:"Space Grotesk","Inter",system-ui,sans-serif;
+    }
+
+    .wrap{
+      width:min(var(--max), calc(100% - 32px));
+      margin:0 auto;
+      position:relative;
+      z-index:1;
+    }
+
+    .card{
+      background:linear-gradient(180deg, rgba(22,28,39,.96), rgba(15,20,30,.98));
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(12px);
+    }
+
+    .soft{
+      background:rgba(255,255,255,.045);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:var(--radius-sm);
+      box-shadow:var(--shadow-soft);
+    }
+
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:8px 14px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.05);
+      color:#ffe6d9;
+      font-size:13px;
+      font-weight:700;
+      letter-spacing:.2px;
+    }
+
+    .eyebrow .dot{
+      width:9px;
+      height:9px;
+      border-radius:999px;
+      background:linear-gradient(135deg, var(--accent), var(--accent-3));
+      box-shadow:0 0 0 6px rgba(255,122,24,.12);
+    }
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:40;
+      background:rgba(14,16,22,.78);
+      backdrop-filter:blur(16px);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+
+    .nav{
+      min-height:80px;
+      display:grid;
+      grid-template-columns:auto 1fr auto;
+      align-items:center;
+      gap:18px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:0;
+    }
+
+    .brand-mark{
+      width:18px;
+      height:18px;
+      border-radius:999px;
+      background:linear-gradient(135deg, var(--accent), var(--accent-3));
+      box-shadow:
+        0 0 0 7px rgba(255,122,24,.10),
+        0 0 30px rgba(255,122,24,.18);
+      position:relative;
+      flex:0 0 auto;
+    }
+
+    .brand-mark::after{
+      content:"";
+      position:absolute;
+      inset:4px;
+      border-radius:999px;
+      background:rgba(255,255,255,.24);
+      filter:blur(1px);
+    }
+
+    .brand-copy{
+      display:flex;
+      flex-direction:column;
+      gap:1px;
+    }
+
+    .brand-name{
+      font-size:18px;
+      font-weight:800;
+      letter-spacing:.2px;
+    }
+
+    .brand-sub{
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.2;
+    }
+
+    nav{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:8px;
+      min-width:0;
+    }
+
+    nav a{
+      padding:10px 12px;
+      border-radius:999px;
+      color:var(--muted);
+      font-size:14px;
+      font-weight:700;
+      transition:background .18s ease, color .18s ease, transform .18s ease;
+      white-space:nowrap;
+    }
+
+    nav a:hover{
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      transform:translateY(-1px);
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      min-height:48px;
+      padding:12px 18px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      font-size:15px;
+      font-weight:800;
+      line-height:1.1;
+      text-align:center;
+      cursor:pointer;
+      transition:
+        transform .22s cubic-bezier(.2,.9,.2,1),
+        box-shadow .22s cubic-bezier(.2,.9,.2,1),
+        background .22s cubic-bezier(.2,.9,.2,1),
+        filter .22s cubic-bezier(.2,.9,.2,1),
+        border-color .22s cubic-bezier(.2,.9,.2,1);
+      box-shadow:0 10px 24px rgba(0,0,0,.16);
+      will-change:transform, box-shadow;
+    }
+
+    .btn:hover{
+      transform:translateY(-2px);
+      background:rgba(255,255,255,.10);
+      box-shadow:0 16px 30px rgba(0,0,0,.22);
+    }
+
+    .btn:active{
+      transform:translateY(0) scale(.975);
+    }
+
+    .btn.primary{
+      border:none;
+      color:#160b05;
+      background:linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow:
+        0 18px 38px rgba(255,122,24,.20),
+        0 0 0 1px rgba(255,255,255,.05) inset;
+    }
+
+    .btn.primary:hover{
+      filter:brightness(1.04);
+    }
+
+    .btn.warn{
+      border:none;
+      color:#1d1200;
+      background:linear-gradient(135deg, #ffe08a, #ffd36a, #ffb703);
+    }
+
+    .btn.danger{
+      border:1px solid rgba(255,126,126,.28);
+      background:rgba(255,126,126,.10);
+      color:#ffe1e1;
+    }
+
+    .btn.small{
+      min-height:42px;
+      padding:10px 14px;
+      font-size:13px;
+      font-weight:800;
+    }
+
+    .page-top{
+      padding:26px 0 14px;
+    }
+
+    .top-card{
+      padding:22px;
+    }
+
+    .top-grid{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:16px;
+      align-items:start;
+    }
+
+    h1{
+      margin:14px 0 8px;
+      font-size:clamp(34px, 5vw, 56px);
+      line-height:.96;
+      letter-spacing:-1.6px;
+      max-width:8.5ch;
+    }
+
+    .lead{
+      margin:0;
+      max-width:58ch;
+      color:var(--muted);
+      font-size:16px;
+    }
+
+    .hero-actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:18px;
+    }
+
+    .stats{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:18px;
+    }
+
+    .stat-chip{
+      display:inline-flex;
+      flex-direction:column;
+      gap:2px;
+      min-width:110px;
+      padding:12px 14px;
+      border-radius:16px;
+      background:rgba(255,255,255,.045);
+      border:1px solid rgba(255,255,255,.08);
+    }
+
+    .stat-chip strong{
+      font-size:18px;
+      font-family:"Space Grotesk","Inter",sans-serif;
+    }
+
+    .stat-chip span{
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .profile-box{
+      padding:16px;
+      height:100%;
+    }
+
+    .profile-title{
+      font-size:16px;
+      font-weight:800;
+      margin-bottom:4px;
+    }
+
+    .profile-sub{
+      color:var(--muted);
+      font-size:13px;
+      margin-bottom:12px;
+    }
+
+    .row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    .section{
+      padding:8px 0 32px;
+    }
+
+    .shell{
+      display:grid;
+      grid-template-columns:1.08fr .92fr;
+      gap:18px;
+      align-items:start;
+    }
+
+    .filters{
+      padding:16px;
+      margin-bottom:16px;
+    }
+
+    .filters-grid{
+      display:grid;
+      grid-template-columns:1.15fr .8fr .8fr .8fr;
+      gap:12px;
+    }
+
+    .filters-grid-2{
+      display:grid;
+      grid-template-columns:.95fr .95fr .95fr auto auto;
+      gap:12px;
+      margin-top:12px;
+      align-items:center;
+    }
+
+    input, select, textarea{
+      width:100%;
+      min-height:52px;
+      padding:13px 14px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.055);
+      color:var(--text);
+      outline:none;
+      font:inherit;
+      transition:
+        border-color .2s ease,
+        box-shadow .2s ease,
+        background .2s ease,
+        transform .2s ease;
+    }
+
+    textarea{
+      min-height:110px;
+      resize:vertical;
+    }
+
+    select option{
+      background:#131824;
+      color:var(--text);
+    }
+
+    input::placeholder,
+    textarea::placeholder{
+      color:rgba(184,192,210,.75);
+    }
+
+    input:focus, select:focus, textarea:focus{
+      border-color:rgba(255,122,24,.34);
+      box-shadow:0 0 0 4px rgba(255,122,24,.10);
+      background:rgba(255,255,255,.075);
+      transform:translateY(-1px);
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.05);
+      color:var(--muted);
+      font-size:12px;
+      font-weight:700;
+    }
+
+    .pill.ok{
+      border-color:rgba(66,215,181,.18);
+      background:rgba(66,215,181,.10);
+      color:#ddfff5;
+    }
+
+    .pill.warn{
+      border-color:rgba(255,211,106,.22);
+      background:rgba(255,211,106,.08);
+      color:#fff0cb;
+    }
+
+    .pill.bad{
+      border-color:rgba(255,126,126,.22);
+      background:rgba(255,126,126,.08);
+      color:#ffe0e0;
+    }
+
+    .filters-note{
+      margin-top:12px;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .section-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:end;
+      gap:16px;
+      flex-wrap:wrap;
+      margin-bottom:16px;
+    }
+
+    .section-head h2{
+      margin:0;
+      font-size:26px;
+      letter-spacing:-.5px;
+    }
+
+    .section-head p{
+      margin:0;
+      max-width:55ch;
+      color:var(--muted);
+      font-size:15px;
+    }
+
+    .count{
+      color:var(--muted);
+      font-size:14px;
+      margin-top:6px;
+    }
+
+    .list{
+      display:grid;
+      gap:16px;
+    }
+
+    .group{
+      padding:18px;
+    }
+
+    .groupHead{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .titleLine{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      align-items:center;
+    }
+
+    .gtitle{
+      font-size:22px;
+      font-weight:800;
+      letter-spacing:-.4px;
+      font-family:"Space Grotesk","Inter",sans-serif;
+    }
+
+    .meta{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:13px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+    }
+
+    .actions{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:flex-end;
+    }
+
+    details{
+      margin-top:14px;
+      border-top:1px solid rgba(255,255,255,.08);
+      padding-top:12px;
+    }
+
+    summary{
+      cursor:pointer;
+      color:#ebedf4;
+      font-weight:700;
+      list-style:none;
+      font-size:14px;
+    }
+
+    summary::-webkit-details-marker{ display:none; }
+
+    .detailGrid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-top:12px;
+    }
+
+    .box{
+      padding:14px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.04);
+    }
+
+    .box h3{
+      margin:0 0 8px;
+      font-size:15px;
+    }
+
+    .box p{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .link{
+      color:#dffcf4;
+      text-decoration:none;
+    }
+
+    .link:hover{
+      text-decoration:underline;
+      text-underline-offset:3px;
+    }
+
+    .chat{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .chatLog{
+      max-height:170px;
+      overflow:auto;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.03);
+      padding:10px;
+    }
+
+    .msg{
+      margin:0 0 8px;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .msg b{
+      color:var(--text);
+    }
+
+    .aside-card{
+      padding:18px;
+      position:sticky;
+      top:98px;
+    }
+
+    .aside-title{
+      margin:0 0 6px;
+      font-size:24px;
+      letter-spacing:-.6px;
+    }
+
+    .aside-sub{
+      margin:0;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .stack{
+      display:grid;
+      gap:12px;
+      margin-top:14px;
+    }
+
+    .grid2{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    .subsection{
+      margin-top:18px;
+      padding-top:16px;
+      border-top:1px solid rgba(255,255,255,.08);
+    }
+
+    .subsection h3{
+      margin:0 0 8px;
+      font-size:16px;
+    }
+
+    .hint{
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .toast{
+      position:fixed;
+      left:50%;
+      transform:translateX(-50%);
+      bottom:18px;
+      z-index:50;
+      display:none;
+      padding:12px 14px;
+      border-radius:14px;
+      background:rgba(18,22,31,.96);
+      border:1px solid rgba(255,255,255,.10);
+      color:var(--text);
+      box-shadow:var(--shadow);
+      max-width:min(680px, 92vw);
+      text-align:center;
+    }
+
+    footer{
+      padding:28px 0 40px;
+      border-top:1px solid rgba(255,255,255,.07);
+      color:var(--muted);
+    }
+
+    .footer-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+    }
+
+    html.js body{
+      opacity:0;
+      transition:opacity .25s ease;
+    }
+
+    html.js body.loaded{
+      opacity:1;
+    }
+
+    html.js body.leaving{
+      opacity:0;
+    }
+
+    @media (max-width: 1100px){
+      .shell{
+        grid-template-columns:1fr;
+      }
+
+      .aside-card{
+        position:static;
+      }
+    }
+
+    @media (max-width: 980px){
+      .nav{
+        grid-template-columns:auto auto;
+        justify-content:space-between;
+      }
+
+      nav{
+        display:none;
+      }
+
+      .top-grid,
+      .filters-grid,
+      .filters-grid-2,
+      .detailGrid{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media (max-width: 720px){
+      .wrap{
+        width:min(var(--max), calc(100% - 22px));
+      }
+
+      .top-card,
+      .group,
+      .aside-card{
+        padding:16px;
+      }
+
+      h1{
+        max-width:none;
+        letter-spacing:-1.2px;
+      }
+
+      .gtitle{
+        font-size:20px;
+      }
+
+      .grid2{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      html{ scroll-behavior:auto; }
+      *, *::before, *::after{
+        transition:none !important;
+        animation:none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="noise"></div>
+
+  <header>
+    <div class="wrap nav">
+      <a class="brand" href="index.html" aria-label="Retour à l'accueil Nexus">
+        <div class="brand-mark"></div>
+        <div class="brand-copy">
+          <span class="brand-name">Nexus</span>
+          <span class="brand-sub">Le sport commence par une connexion</span>
+        </div>
+      </a>
+
+      <nav>
+        <a href="index.html">Accueil</a>
+        <a href="horaires.html">Horaires</a>
+        <a href="groupes.html">Groupes</a>
+      </nav>
+
+      <a class="btn primary" href="horaires.html">Voir les horaires</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-top">
+      <div class="wrap">
+        <div class="card top-card">
+          <div class="top-grid">
+            <div>
+              <div class="eyebrow">
+                <span class="dot"></span>
+                Groupes sportifs
+              </div>
+
+              <h1>Rejoins un groupe.</h1>
+
+              <p class="lead">
+                Trouve une activité selon le sport, le niveau, le moment et le coût par personne.
+                Même système que ton prototype original, avec un thème plus fort et plus propre.
+              </p>
+
+              <div class="hero-actions">
+                <a class="btn primary" href="#create">Créer un groupe</a>
+                <a class="btn" href="horaires.html">Consulter les horaires</a>
+              </div>
+
+              <div class="stats">
+                <div class="stat-chip">
+                  <strong id="openCount">0</strong>
+                  <span>groupe(s) ouvert(s)</span>
+                </div>
+                <div class="stat-chip">
+                  <strong id="totalCount">0</strong>
+                  <span>activité(s)</span>
+                </div>
+                <div class="stat-chip">
+                  <strong>coûts partagés</strong>
+                  <span>plus accessibles</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="soft profile-box">
+              <div class="profile-title">Ton profil rapide</div>
+              <div class="profile-sub">Entre ton prénom pour rejoindre ou créer une activité.</div>
+
+              <input id="displayName" placeholder="Ex. Alex" />
+
+              <div class="row" style="margin-top:10px;">
+                <label class="pill" style="cursor:pointer;">
+                  <input id="reminders" type="checkbox" style="accent-color: var(--accent); width:auto; min-height:auto; padding:0; margin:0;">
+                  Activer “rappels”
+                </label>
+                <span class="pill ok" id="reliability">Fiabilité: 100</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap shell">
+        <div>
+          <div class="soft filters">
+            <div class="filters-grid">
+              <input id="q" placeholder="Rechercher : tennis, jeudi, 18h, gratuit..." />
+              <select id="sport">
+                <option value="">Sport (tous)</option>
+                <option>Basket</option>
+                <option>Volley</option>
+                <option>Badminton</option>
+                <option>Tennis</option>
+                <option>Pickleball</option>
+                <option>Patinage</option>
+                <option>Hockey</option>
+                <option>Multi</option>
+              </select>
+              <select id="niveau">
+                <option value="">Niveau (tous)</option>
+                <option>Débutant</option>
+                <option>Intermédiaire</option>
+                <option>Avancé</option>
+                <option>Mixte</option>
+              </select>
+              <select id="statut">
+                <option value="">Statut (tous)</option>
+                <option value="open">Ouvert</option>
+                <option value="full">Complet</option>
+                <option value="confirmed">Confirmé</option>
+              </select>
+            </div>
+
+            <div class="filters-grid-2">
+              <select id="lieu">
+                <option value="">Lieu (tous)</option>
+                <option>BdeB</option>
+                <option>Claude-Robillard</option>
+                <option>Aréna Bill-Durnan</option>
+                <option>Aréna Michel-Normandin</option>
+                <option>Aréna Mont-Royal</option>
+                <option>Parc Martin-Luther-King</option>
+                <option>Parc Warren-Allmand</option>
+                <option>Centre Saint-Denis</option>
+              </select>
+
+              <select id="jour">
+                <option value="">Jour (tous)</option>
+                <option>Lundi</option>
+                <option>Mardi</option>
+                <option>Mercredi</option>
+                <option>Jeudi</option>
+                <option>Vendredi</option>
+                <option>Samedi</option>
+                <option>Dimanche</option>
+              </select>
+
+              <select id="prix">
+                <option value="">Prix/pers (tous)</option>
+                <option value="0-5">0–5$</option>
+                <option value="5-10">5–10$</option>
+                <option value="10-20">10–20$</option>
+                <option value="20-999">20$+</option>
+              </select>
+
+              <button class="btn small" id="reset">Reset filtres</button>
+              <button class="btn small danger" id="wipe">Effacer démo</button>
+            </div>
+
+            <div class="filters-note">
+              Recherche, filtres, coût par personne, création, liste d’attente, chat et partage : même logique que ton système original.
+            </div>
+          </div>
+
+          <div class="section-head">
+            <div>
+              <h2>Groupes disponibles</h2>
+              <div class="count" id="count">0 groupe(s) affiché(s)</div>
+            </div>
+            <p>
+              Rejoins, quitte, filtre ou ouvre les détails pour voir les participants, le chat et le partage.
+            </p>
+          </div>
+
+          <div class="list" id="groups"></div>
+        </div>
+
+        <aside>
+          <div class="card aside-card" id="create">
+            <h2 class="aside-title">Créer un groupe</h2>
+            <p class="aside-sub">
+              Crée une activité avec coût total, places et notes. Le coût par personne est calculé automatiquement.
+            </p>
+
+            <div class="stack">
+              <input class="input" id="title" placeholder="Titre (ex. Badminton jeudi 18h)" />
+
+              <div class="grid2">
+                <select id="cSport">
+                  <option>Badminton</option>
+                  <option>Basket</option>
+                  <option>Volley</option>
+                  <option>Tennis</option>
+                  <option>Pickleball</option>
+                  <option>Patinage</option>
+                  <option>Hockey</option>
+                  <option>Multi</option>
+                </select>
+
+                <select id="cNiveau">
+                  <option>Débutant</option>
+                  <option>Intermédiaire</option>
+                  <option>Avancé</option>
+                  <option>Mixte</option>
+                </select>
+              </div>
+
+              <div class="grid2">
+                <select id="cLieu">
+                  <option>BdeB</option>
+                  <option>Claude-Robillard</option>
+                  <option>Centre Saint-Denis</option>
+                  <option>Aréna Bill-Durnan</option>
+                  <option>Parc Martin-Luther-King</option>
+                  <option>Parc Warren-Allmand</option>
+                  <option>Aréna Mont-Royal</option>
+                  <option>Aréna Michel-Normandin</option>
+                </select>
+
+                <select id="cJour">
+                  <option>Lundi</option>
+                  <option>Mardi</option>
+                  <option>Mercredi</option>
+                  <option>Jeudi</option>
+                  <option>Vendredi</option>
+                  <option>Samedi</option>
+                  <option>Dimanche</option>
+                </select>
+              </div>
+
+              <div class="grid2">
+                <input class="input" id="cHeure" placeholder="Heure (ex. 18:00)" />
+                <input class="input" id="cDuree" placeholder="Durée (h) (ex. 1.5)" />
+              </div>
+
+              <div class="grid2">
+                <input class="input" id="cPlaces" placeholder="Places max (ex. 10)" />
+                <input class="input" id="cCost" placeholder="Coût total (ex. 60)" />
+              </div>
+
+              <input class="input" id="cFee" placeholder="Frais plateforme / pers (ex. 1.00)" />
+              <textarea id="cNotes" placeholder="Notes : équipement, niveau, règles, point de rencontre..."></textarea>
+
+              <div class="row" style="justify-content:space-between;">
+                <button class="btn warn" id="createBtn">Créer le groupe</button>
+                <button class="btn small" id="seed">Ajouter démos</button>
+              </div>
+            </div>
+
+            <div class="subsection">
+              <h3>Mes groupes</h3>
+              <div id="myGroups" class="list" style="margin-top:10px;"></div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <footer>
+      <div class="wrap footer-row">
+        <div>© <span id="year"></span> Nexus • Groupes sportifs</div>
+        <div>
+          <a href="index.html">Accueil</a> • <a href="horaires.html">Horaires</a>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const KEY = "brebeuf_groups_v1";
+    const USERKEY = "brebeuf_user_v1";
+    const REMKEY = "brebeuf_reminders_v1";
+    const RELKEY = "brebeuf_reliability_v1";
+
+    const $ = (id) => document.getElementById(id);
+
+    function loadGroups(){
+      try { return JSON.parse(localStorage.getItem(KEY) || "[]"); }
+      catch { return []; }
+    }
+
+    function saveGroups(groups){
+      localStorage.setItem(KEY, JSON.stringify(groups));
+    }
+
+    function loadUser(){
+      try { return JSON.parse(localStorage.getItem(USERKEY) || "{}"); }
+      catch { return {}; }
+    }
+
+    function saveUser(u){
+      localStorage.setItem(USERKEY, JSON.stringify(u));
+    }
+
+    function loadReliability(){
+      try { return JSON.parse(localStorage.getItem(RELKEY) || '{"noShow":0}'); }
+      catch { return { noShow: 0 }; }
+    }
+
+    function uid(){
+      return Math.random().toString(16).slice(2) + Date.now().toString(16);
+    }
+
+    let toastTimer = null;
+    function toast(msg){
+      const t = $("toast");
+      t.textContent = msg;
+      t.style.display = "block";
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.style.display = "none", 2400);
+    }
+
+    function escapeHtml(s){
+      return String(s ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function money(n){
+      const x = Number(n);
+      if(!isFinite(x)) return "—";
+      return x.toFixed(2) + " $";
+    }
+
+    function calcPerPerson(totalCost, feePerPerson, max){
+      const t = Number(totalCost), f = Number(feePerPerson), m = Number(max);
+      if(!isFinite(t) || !isFinite(f) || !isFinite(m) || m <= 0) return null;
+      return (t / m) + f;
+    }
+
+    function statusOf(g){
+      const max = g.max || 0;
+      const joined = (g.participants || []).length;
+      const threshold = Math.max(2, Math.ceil(max * (g.confirmThreshold ?? 0.7)));
+      const confirmed = joined >= threshold;
+      const full = joined >= max;
+      return { confirmed, full, joined, max, threshold };
+    }
+
+    function seedIfEmpty(){
+      const groups = loadGroups();
+      if(groups.length) return;
+
+      const demo = [
+        {
+          id: uid(),
+          title: "Badminton jeudi 18h (Claude-Robillard)",
+          sport: "Badminton",
+          niveau: "Intermédiaire",
+          lieu: "Claude-Robillard",
+          jour: "Jeudi",
+          heure: "18:00",
+          dureeH: 1.0,
+          max: 8,
+          costTotal: 27,
+          feePerPerson: 1.00,
+          confirmThreshold: 0.7,
+          notes: "Raquettes requises. rM/nrM selon votre statut.",
+          source: "https://montreal.ca/lieux/gymnase-double-du-complexe-sportif-claude-robillard",
+          owner: "Admin",
+          participants: ["Admin", "Kaeli"],
+          waitlist: ["Jake"],
+          chat: [{ by: "Admin", text: "Salut! Dites votre niveau et si vous avez une raquette.", ts: Date.now()-600000 }],
+          createdAt: Date.now()-7200000
+        },
+        {
+          id: uid(),
+          title: "Tennis samedi 14h (Parc Martin-Luther-King)",
+          sport: "Tennis",
+          niveau: "Mixte",
+          lieu: "Parc Martin-Luther-King",
+          jour: "Samedi",
+          heure: "14:00",
+          dureeH: 1.0,
+          max: 4,
+          costTotal: 12,
+          feePerPerson: 0.50,
+          confirmThreshold: 0.75,
+          notes: "Si gratuit sur certaines périodes, on ajuste le coût à 0.",
+          source: "https://montreal.ca/lieux/terrains-de-tennis-et-de-pickleball-du-parc-martin-luther-king",
+          owner: "Admin",
+          participants: ["Admin"],
+          waitlist: [],
+          chat: [],
+          createdAt: Date.now()-3600000
+        },
+        {
+          id: uid(),
+          title: "Gym multi mardi 19h (BdeB)",
+          sport: "Multi",
+          niveau: "Mixte",
+          lieu: "BdeB",
+          jour: "Mardi",
+          heure: "19:00",
+          dureeH: 1.5,
+          max: 10,
+          costTotal: 62.70,
+          feePerPerson: 1.00,
+          confirmThreshold: 0.7,
+          notes: "Apportez des chaussures propres.",
+          source: "https://complexesportif.bdeb.qc.ca/plateaux-sportifs-interieurs",
+          owner: "Admin",
+          participants: ["Admin","Lashwana","Zhiheng","Jake","Kaeli","Amina","Sam"],
+          waitlist: [],
+          chat: [],
+          createdAt: Date.now()-5200000
+        }
+      ];
+      saveGroups(demo);
+    }
+
+    function renderChat(chat){
+      if(!chat || !chat.length) return `<p class="msg">Aucun message.</p>`;
+      return chat.slice(-40).map(m => {
+        const when = new Date(m.ts || Date.now()).toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"});
+        return `<p class="msg"><b>${escapeHtml(m.by || "?")}</b> <span style="opacity:.7">(${when})</span> : ${escapeHtml(m.text || "")}</p>`;
+      }).join("");
+    }
+
+    function renderMyGroups(groups, name){
+      const box = $("myGroups");
+      if(!box) return;
+
+      if(!name){
+        box.innerHTML = `<div class="hint">Entre ton prénom pour voir tes groupes.</div>`;
+        return;
+      }
+
+      const mine = groups.filter(g => (g.participants || []).includes(name) || (g.waitlist || []).includes(name));
+
+      if(!mine.length){
+        box.innerHTML = `<div class="hint">Aucun groupe rejoint pour l’instant.</div>`;
+        return;
+      }
+
+      box.innerHTML = mine.map(g => {
+        const st = statusOf(g);
+        const tag = (g.participants || []).includes(name) ? "Participant" : "Attente";
+        const pill = tag === "Participant" ? "ok" : "warn";
+        return `
+          <div class="box">
+            <div style="display:flex; justify-content:space-between; gap:8px; flex-wrap:wrap;">
+              <div>
+                <div style="font-weight:800; font-family:'Space Grotesk','Inter',sans-serif;">${escapeHtml(g.title)}</div>
+                <div class="hint">${escapeHtml(g.jour)} ${escapeHtml(g.heure)} • ${escapeHtml(g.lieu)} • ${st.joined}/${st.max}</div>
+              </div>
+              <span class="pill ${pill}">${tag}</span>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function getName(){
+      const u = loadUser();
+      return (u.name || "").trim();
+    }
+
+    function joinGroup(id){
+      const name = getName();
+      if(!name) return toast("Entre ton prénom d’abord.");
+
+      const groups = loadGroups();
+      const g = groups.find(x => x.id === id);
+      if(!g) return;
+
+      g.participants = g.participants || [];
+      g.waitlist = g.waitlist || [];
+
+      if(g.participants.includes(name)) return toast("Tu es déjà dans ce groupe.");
+      if(g.waitlist.includes(name)) return toast("Tu es déjà en liste d’attente.");
+
+      const st = statusOf(g);
+      if(st.full){
+        g.waitlist.push(name);
+        saveGroups(groups);
+        toast("Groupe complet → ajouté à la liste d’attente.");
+        render();
+        return;
+      }
+
+      g.participants.push(name);
+      saveGroups(groups);
+      toast("✅ Rejoint !");
+
+      const st2 = statusOf(g);
+      if(st2.confirmed){
+        g.chat = g.chat || [];
+        g.chat.push({ by: "Système", text: "🎉 Groupe confirmé !", ts: Date.now() });
+        saveGroups(groups);
+      }
+      render();
+    }
+
+    function toggleWait(id){
+      const name = getName();
+      if(!name) return toast("Entre ton prénom d’abord.");
+
+      const groups = loadGroups();
+      const g = groups.find(x => x.id === id);
+      if(!g) return;
+
+      g.waitlist = g.waitlist || [];
+      const i = g.waitlist.indexOf(name);
+      if(i >= 0){
+        g.waitlist.splice(i,1);
+        saveGroups(groups);
+        toast("Retiré de la liste d’attente.");
+        render();
+        return;
+      }
+      g.waitlist.push(name);
+      saveGroups(groups);
+      toast("Ajouté à la liste d’attente.");
+      render();
+    }
+
+    function leaveGroup(id){
+      const name = getName();
+      if(!name) return toast("Entre ton prénom d’abord.");
+
+      const groups = loadGroups();
+      const g = groups.find(x => x.id === id);
+      if(!g) return;
+
+      g.participants = g.participants || [];
+      g.waitlist = g.waitlist || [];
+
+      const wasIn = g.participants.includes(name);
+      g.participants = g.participants.filter(p => p !== name);
+      g.waitlist = g.waitlist.filter(p => p !== name);
+
+      const st = statusOf(g);
+      if(!st.full && g.waitlist.length > 0){
+        const next = g.waitlist.shift();
+        g.participants.push(next);
+        g.chat = g.chat || [];
+        g.chat.push({ by: "Système", text: `✅ ${next} a été ajouté du waitlist (place libérée).`, ts: Date.now() });
+        toast(`Tu as quitté. ${next} est entré depuis l’attente.`);
+      } else {
+        toast(wasIn ? "Tu as quitté le groupe." : "Retiré.");
+      }
+
+      saveGroups(groups);
+      render();
+    }
+
+    async function copyText(text){
+      try{
+        await navigator.clipboard.writeText(text);
+        toast("Copié ✅");
+      } catch {
+        toast("Copie impossible (browser).");
+      }
+    }
+
+    function sendMessage(id){
+      const name = getName();
+      if(!name) return toast("Entre ton prénom d’abord.");
+
+      const input = $("msg-" + id);
+      if(!input) return;
+      const text = input.value.trim();
+      if(!text) return;
+
+      const groups = loadGroups();
+      const g = groups.find(x => x.id === id);
+      if(!g) return;
+
+      g.chat = g.chat || [];
+      g.chat.push({ by: name, text, ts: Date.now() });
+      saveGroups(groups);
+      input.value = "";
+      render();
+      toast("Message envoyé.");
+    }
+
+    function shareGroup(id){
+      const groups = loadGroups();
+      const g = groups.find(x => x.id === id);
+      if(!g) return;
+
+      const text = `Groupe: ${g.title} | ${g.jour} ${g.heure} | Lieu: ${g.lieu} | Sport: ${g.sport} | Niveau: ${g.niveau}`;
+      copyText(text);
+    }
+
+    function resetFilters(){
+      $("q").value = "";
+      $("sport").value = "";
+      $("niveau").value = "";
+      $("lieu").value = "";
+      $("jour").value = "";
+      $("statut").value = "";
+      $("prix").value = "";
+      render();
+    }
+
+    function wipeDemo(){
+      localStorage.removeItem(KEY);
+      toast("Données démo effacées.");
+      render();
+    }
+
+    function createGroup(){
+      const name = getName();
+      if(!name) return toast("Entre ton prénom d’abord.");
+
+      const title = $("title").value.trim();
+      const sport = $("cSport").value;
+      const niveau = $("cNiveau").value;
+      const lieu = $("cLieu").value;
+      const jour = $("cJour").value;
+      const heure = $("cHeure").value.trim() || "18:00";
+      const dureeH = Number($("cDuree").value || 1);
+      const max = Number($("cPlaces").value || 10);
+      const costTotal = Number($("cCost").value || 0);
+      const feePerPerson = Number($("cFee").value || 0);
+      const notes = $("cNotes").value.trim();
+
+      if(!max || max < 2) return toast("Places max doit être ≥ 2.");
+      if(!isFinite(costTotal)) return toast("Coût total invalide.");
+      if(!isFinite(feePerPerson)) return toast("Frais/pers invalide.");
+
+      const g = {
+        id: uid(),
+        title: title || `${sport} ${jour} ${heure} (${lieu})`,
+        sport, niveau, lieu, jour, heure,
+        dureeH: isFinite(dureeH) ? dureeH : 1,
+        max,
+        costTotal,
+        feePerPerson,
+        confirmThreshold: 0.7,
+        notes,
+        source: "",
+        owner: name,
+        participants: [name],
+        waitlist: [],
+        chat: [{ by: "Système", text: "Groupe créé ✅. Partage-le pour attirer des joueurs.", ts: Date.now() }],
+        createdAt: Date.now()
+      };
+
+      const groups = loadGroups();
+      groups.unshift(g);
+      saveGroups(groups);
+
+      $("title").value = "";
+      $("cHeure").value = "";
+      $("cDuree").value = "";
+      $("cPlaces").value = "";
+      $("cCost").value = "";
+      $("cFee").value = "";
+      $("cNotes").value = "";
+
+      toast("✨ Groupe créé !");
+      render();
+    }
+
+    function syncUserUI(){
+      const u = loadUser();
+      $("displayName").value = u.name || "";
+      const rem = localStorage.getItem(REMKEY) === "1";
+      $("reminders").checked = rem;
+
+      const rel = loadReliability();
+      const score = Math.max(0, 100 - (rel.noShow || 0) * 20);
+      $("reliability").textContent = "Fiabilité: " + score;
+    }
+
+    function render(){
+      const groups = loadGroups();
+      const user = loadUser();
+      const name = (user.name || "").trim();
+
+      const q = $("q").value.trim().toLowerCase();
+      const fSport = $("sport").value;
+      const fNiv = $("niveau").value;
+      const fLieu = $("lieu").value;
+      const fJour = $("jour").value;
+      const fStatut = $("statut").value;
+      const fPrix = $("prix").value;
+
+      const filtered = groups.filter(g => {
+        const blob = `${g.title} ${g.sport} ${g.niveau} ${g.lieu} ${g.jour} ${g.heure} ${g.notes} ${g.source}`.toLowerCase();
+        if(q && !blob.includes(q)) return false;
+        if(fSport && g.sport !== fSport) return false;
+        if(fNiv && g.niveau !== fNiv) return false;
+        if(fLieu && g.lieu !== fLieu) return false;
+        if(fJour && g.jour !== fJour) return false;
+
+        const per = calcPerPerson(g.costTotal, g.feePerPerson, g.max);
+        if(fPrix && per != null){
+          const [a,b] = fPrix.split("-").map(Number);
+          if(!(per >= a && per < b)) return false;
+        } else if (fPrix) {
+          return false;
+        }
+
+        const st = statusOf(g);
+        if(fStatut === "open" && st.joined >= st.max) return false;
+        if(fStatut === "full" && !st.full) return false;
+        if(fStatut === "confirmed" && !st.confirmed) return false;
+
+        return true;
+      });
+
+      $("count").textContent = `${filtered.length} groupe(s) affiché(s)`;
+      $("totalCount").textContent = groups.length;
+      $("openCount").textContent = groups.filter(g => !statusOf(g).full).length;
+
+      renderMyGroups(groups, name);
+
+      const container = $("groups");
+      container.innerHTML = filtered.length ? "" : `
+        <div class="card group">
+          <div class="gtitle">Aucun groupe trouvé</div>
+          <div class="hint" style="margin-top:6px;">Essaie un autre filtre, ou crée un groupe à droite.</div>
+        </div>
+      `;
+
+      for(const g of filtered){
+        const st = statusOf(g);
+        const per = calcPerPerson(g.costTotal, g.feePerPerson, g.max);
+        const isIn = name && (g.participants || []).includes(name);
+        const isWait = name && (g.waitlist || []).includes(name);
+
+        let statusPill = `<span class="pill ok">Ouvert</span>`;
+        if(st.full) statusPill = `<span class="pill warn">Complet</span>`;
+        if(st.confirmed) statusPill = `<span class="pill">Confirmé</span>`;
+
+        const joinBtn = !name
+          ? `<span class="pill bad">Entre ton prénom pour rejoindre</span>`
+          : isIn
+            ? `<button class="btn small danger" data-act="leave" data-id="${g.id}">Quitter</button>`
+            : (st.full
+                ? `<button class="btn small warn" data-act="wait" data-id="${g.id}">${isWait ? "Quitter attente" : "Liste d’attente"}</button>`
+                : `<button class="btn small primary" data-act="join" data-id="${g.id}">Rejoindre</button>`);
+
+        const shareText = `Groupe: ${g.title} | ${g.jour} ${g.heure} | Lieu: ${g.lieu} | Sport: ${g.sport} | Niveau: ${g.niveau}`;
+
+        const sourceLink = g.source
+          ? `<a class="link" href="${escapeHtml(g.source)}" target="_blank" rel="noopener">Source</a>`
+          : `<span style="color:rgba(184,192,210,.7)">—</span>`;
+
+        const html = `
+          <div class="card group">
+            <div class="groupHead">
+              <div>
+                <div class="titleLine">
+                  <span class="gtitle">${escapeHtml(g.title || `${g.sport} ${g.jour} ${g.heure}`)}</span>
+                  ${statusPill}
+                  <span class="pill">${escapeHtml(g.sport)}</span>
+                  <span class="pill">${escapeHtml(g.niveau)}</span>
+                  <span class="pill">${escapeHtml(g.lieu)}</span>
+                </div>
+                <div class="meta">
+                  <span>🗓️ ${escapeHtml(g.jour)} • 🕒 ${escapeHtml(g.heure)} • ⏱️ ${escapeHtml(g.dureeH)}h</span>
+                  <span>👥 ${st.joined}/${st.max} (confirmé à ${st.threshold})</span>
+                  <span>💰 ${per == null ? "—" : money(per)} / pers</span>
+                  <span>🔗 ${sourceLink}</span>
+                </div>
+              </div>
+
+              <div class="actions">
+                ${joinBtn}
+                <button class="btn small" data-act="share" data-id="${g.id}">Partager</button>
+              </div>
+            </div>
+
+            <details>
+              <summary>Voir détails + chat</summary>
+
+              <div class="detailGrid">
+                <div class="box">
+                  <h3>Notes / règles</h3>
+                  <p>${escapeHtml(g.notes || "—")}</p>
+                  <p style="margin-top:8px;">
+                    <span class="pill">Organisateur: ${escapeHtml(g.owner || "—")}</span>
+                    <span class="pill">Coût total: ${money(g.costTotal)} • Frais/pers: ${money(g.feePerPerson)}</span>
+                  </p>
+                </div>
+
+                <div class="box">
+                  <h3>Participants</h3>
+                  <p>${escapeHtml((g.participants || []).join(", ") || "—")}</p>
+                  <p style="margin-top:8px;">
+                    <span class="pill warn">Attente: ${escapeHtml((g.waitlist || []).join(", ") || "—")}</span>
+                  </p>
+                </div>
+              </div>
+
+              <div class="box" style="margin-top:12px;">
+                <h3>Chat (mini)</h3>
+                <div class="chat">
+                  <div class="chatLog" id="log-${g.id}">
+                    ${renderChat(g.chat || [])}
+                  </div>
+                  <div class="row">
+                    <input class="input" id="msg-${g.id}" placeholder="Écrire un message…" />
+                    <button class="btn small" data-act="send" data-id="${g.id}">Envoyer</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="box" style="margin-top:12px;">
+                <h3>Partage (copie)</h3>
+                <p class="hint" style="margin-bottom:10px;">Copie ce texte pour Instagram/DM :</p>
+                <div class="row">
+                  <input class="input" value="${escapeHtml(shareText)}" readonly />
+                  <button class="btn small" data-act="copy" data-text="${escapeHtml(shareText)}">Copier</button>
+                </div>
+              </div>
+            </details>
+          </div>
+        `;
+        container.insertAdjacentHTML("beforeend", html);
+      }
+    }
+
+    function init(){
+      seedIfEmpty();
+      syncUserUI();
+      render();
+
+      ["q","sport","niveau","lieu","jour","statut","prix"].forEach(id => {
+        $(id).addEventListener("input", render);
+        $(id).addEventListener("change", render);
+      });
+
+      $("reset").addEventListener("click", resetFilters);
+      $("wipe").addEventListener("click", wipeDemo);
+
+      $("displayName").addEventListener("input", (e) => {
+        const u = loadUser();
+        u.name = e.target.value;
+        saveUser(u);
+        render();
+      });
+
+      $("reminders").addEventListener("change", (e) => {
+        localStorage.setItem(REMKEY, e.target.checked ? "1" : "0");
+        toast(e.target.checked ? "Rappels activés (MVP)." : "Rappels désactivés.");
+      });
+
+      $("createBtn").addEventListener("click", createGroup);
+      $("seed").addEventListener("click", () => {
+        localStorage.removeItem(KEY);
+        seedIfEmpty();
+        toast("Données démo ajoutées.");
+        render();
+      });
+
+      document.addEventListener("click", (e) => {
+        const el = e.target.closest("[data-act]");
+        if(!el) return;
+
+        const act = el.getAttribute("data-act");
+        const id = el.getAttribute("data-id");
+
+        if(act === "join") joinGroup(id);
+        if(act === "leave") leaveGroup(id);
+        if(act === "wait") toggleWait(id);
+        if(act === "send") sendMessage(id);
+        if(act === "share") shareGroup(id);
+        if(act === "copy") copyText(el.getAttribute("data-text") || "");
+      });
+    }
+
+    init();
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    window.addEventListener("DOMContentLoaded", () => {
+      document.body.classList.add("loaded");
+    });
+
+    document.addEventListener("click", (e) => {
+      const a = e.target.closest("a");
+      if(!a) return;
+
+      const href = a.getAttribute("href") || "";
+
+      if(href.startsWith("#")) return;
+      if(a.target === "_blank") return;
+      if(href.startsWith("http")) return;
+      if(href.startsWith("mailto:") || href.startsWith("tel:")) return;
+
+      e.preventDefault();
+      document.body.classList.add("leaving");
+      setTimeout(() => { window.location.href = href; }, 220);
+    });
+  </script>
+</body>
+</html>
