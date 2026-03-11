@@ -1,1 +1,1397 @@
+<!doctype html>
+<html lang="en-CA">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nexus — Sport starts with a connection</title>
+  <meta
+    name="description"
+    content="Nexus is a student sports platform that helps young people find partners, join groups, and play more often together."
+  />
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    document.documentElement.classList.add("js");
+  </script>
+
+  <style>
+    :root{
+      --bg:#0d0f14;
+      --bg-2:#12151d;
+      --panel:#161a24;
+      --panel-2:#11151e;
+      --text:#f4f6fb;
+      --muted:#bfc6d7;
+      --line:rgba(255,255,255,.08);
+      --line-strong:rgba(255,255,255,.14);
+
+      --accent:#ff7a18;
+      --accent-2:#ff4d8d;
+      --accent-3:#44d7b6;
+
+      --shadow:0 24px 60px rgba(0,0,0,.34);
+      --shadow-soft:0 14px 34px rgba(0,0,0,.22);
+
+      --radius:28px;
+      --radius-md:22px;
+      --radius-sm:16px;
+      --max:1180px;
+      --header-offset:90px;
+    }
+
+    html{
+      scroll-behavior:smooth;
+      scroll-padding-top:var(--header-offset);
+      background:var(--bg);
+    }
+
+    section[id]{
+      scroll-margin-top:var(--header-offset);
+    }
+
+    *{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      color:var(--text);
+      font-family:"Inter", system-ui, sans-serif;
+      line-height:1.55;
+      background:
+        radial-gradient(700px 420px at 10% -10%, rgba(255,122,24,.18), transparent 60%),
+        radial-gradient(820px 460px at 88% 0%, rgba(255,77,141,.18), transparent 58%),
+        radial-gradient(560px 360px at 78% 72%, rgba(68,215,182,.14), transparent 56%),
+        linear-gradient(180deg, #0d0f14 0%, #11141b 48%, #0d1016 100%);
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+    }
+
+    .noise{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      opacity:.035;
+      z-index:0;
+      background-image:
+        radial-gradient(circle at 20% 20%, #fff 0 1px, transparent 1px),
+        radial-gradient(circle at 70% 40%, #fff 0 1px, transparent 1px),
+        radial-gradient(circle at 40% 80%, #fff 0 1px, transparent 1px),
+        radial-gradient(circle at 80% 85%, #fff 0 1px, transparent 1px);
+      background-size:190px 190px;
+    }
+
+    a{
+      color:inherit;
+      text-decoration:none;
+    }
+
+    .title-font,
+    h1,h2,h3,
+    .brand-name,
+    .btn,
+    nav a{
+      font-family:"Space Grotesk","Inter",system-ui,sans-serif;
+    }
+
+    .wrap{
+      width:min(var(--max), calc(100% - 32px));
+      margin:0 auto;
+      position:relative;
+      z-index:1;
+    }
+
+    .card{
+      background:linear-gradient(180deg, rgba(24,29,40,.92), rgba(17,21,30,.96));
+      border:1px solid var(--line);
+      border-radius:var(--radius-md);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(12px);
+    }
+
+    .soft{
+      background:rgba(255,255,255,.045);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:var(--radius-sm);
+      box-shadow:var(--shadow-soft);
+    }
+
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:8px 14px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.05);
+      color:#f8e0d1;
+      font-size:13px;
+      font-weight:700;
+      letter-spacing:.2px;
+    }
+
+    .eyebrow .dot{
+      width:9px;
+      height:9px;
+      border-radius:999px;
+      background:linear-gradient(135deg, var(--accent), var(--accent-3));
+      box-shadow:0 0 0 6px rgba(255,122,24,.12);
+    }
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:40;
+      background:rgba(13,15,20,.74);
+      backdrop-filter:blur(16px);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+
+    .nav{
+      min-height:84px;
+      display:grid;
+      grid-template-columns:auto 1fr auto;
+      align-items:center;
+      gap:18px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:0;
+    }
+
+    .brand-mark{
+      width:18px;
+      height:18px;
+      border-radius:999px;
+      background:linear-gradient(135deg, var(--accent), var(--accent-3));
+      box-shadow:
+        0 0 0 7px rgba(255,122,24,.10),
+        0 0 30px rgba(255,122,24,.18);
+      position:relative;
+      flex:0 0 auto;
+    }
+
+    .brand-mark::after{
+      content:"";
+      position:absolute;
+      inset:4px;
+      border-radius:999px;
+      background:rgba(255,255,255,.22);
+      filter:blur(1px);
+    }
+
+    .brand-copy{
+      display:flex;
+      flex-direction:column;
+      gap:1px;
+    }
+
+    .brand-name{
+      font-size:18px;
+      font-weight:800;
+      letter-spacing:.2px;
+    }
+
+    .brand-sub{
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.2;
+    }
+
+    nav{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:8px;
+      min-width:0;
+    }
+
+    nav a{
+      padding:10px 12px;
+      border-radius:999px;
+      color:var(--muted);
+      font-size:14px;
+      font-weight:700;
+      white-space:nowrap;
+      transition:background .18s ease, color .18s ease, transform .18s ease;
+    }
+
+    nav a:hover{
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      transform:translateY(-1px);
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      min-height:50px;
+      padding:12px 18px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      font-size:15px;
+      font-weight:800;
+      text-align:center;
+      line-height:1.1;
+      cursor:pointer;
+      transition:
+        transform .22s cubic-bezier(.2,.9,.2,1),
+        box-shadow .22s cubic-bezier(.2,.9,.2,1),
+        background .22s cubic-bezier(.2,.9,.2,1),
+        filter .22s cubic-bezier(.2,.9,.2,1);
+      box-shadow:0 10px 24px rgba(0,0,0,.16);
+      will-change:transform, box-shadow;
+    }
+
+    .btn:hover{
+      transform:translateY(-2px);
+      background:rgba(255,255,255,.10);
+      box-shadow:0 16px 30px rgba(0,0,0,.22);
+    }
+
+    .btn:active{
+      transform:translateY(0) scale(.975);
+    }
+
+    .btn.primary{
+      border:none;
+      color:#140b05;
+      background:linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow:
+        0 18px 38px rgba(255,122,24,.20),
+        0 0 0 1px rgba(255,255,255,.05) inset;
+    }
+
+    .btn.primary:hover{
+      filter:brightness(1.04);
+      box-shadow:
+        0 22px 42px rgba(255,122,24,.26),
+        0 0 0 1px rgba(255,255,255,.08) inset;
+    }
+
+    .btn.secondary{
+      color:#081510;
+      border:none;
+      background:linear-gradient(135deg, #b8ffe7, var(--accent-3));
+      box-shadow:
+        0 18px 38px rgba(68,215,182,.16),
+        0 0 0 1px rgba(255,255,255,.05) inset;
+    }
+
+    .btn.secondary:hover{
+      filter:brightness(1.04);
+    }
+
+    .header-cta{
+      min-width:210px;
+      min-height:58px;
+      padding:14px 22px;
+      white-space:nowrap;
+    }
+
+    .hero{
+      padding:34px 0 8px;
+    }
+
+    .hero-shell{
+      position:relative;
+      overflow:hidden;
+      border-radius:34px;
+      border:1px solid rgba(255,255,255,.08);
+      background:
+        radial-gradient(600px 340px at 15% 10%, rgba(255,122,24,.16), transparent 60%),
+        radial-gradient(700px 360px at 85% 0%, rgba(255,77,141,.14), transparent 56%),
+        radial-gradient(480px 280px at 82% 82%, rgba(68,215,182,.10), transparent 58%),
+        linear-gradient(180deg, rgba(22,26,36,.96), rgba(15,18,25,.98));
+      box-shadow:0 28px 80px rgba(0,0,0,.42);
+    }
+
+    .hero-shell::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size:48px 48px;
+      opacity:.18;
+      pointer-events:none;
+    }
+
+    .hero-inner{
+      position:relative;
+      z-index:1;
+      display:grid;
+      grid-template-columns:1.04fr .96fr;
+      gap:26px;
+      align-items:center;
+      padding:34px;
+    }
+
+    .hero-left{
+      max-width:640px;
+    }
+
+    .headline{
+      margin:18px 0 14px;
+      font-size:clamp(42px, 7vw, 76px);
+      line-height:.95;
+      letter-spacing:-2px;
+      max-width:10ch;
+    }
+
+    .headline .accent{
+      display:block;
+      background:linear-gradient(135deg, #fff3ec 0%, #ffd3b0 30%, #ff8fb7 58%, #8af1d8 100%);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+
+    .sub{
+      margin:0;
+      max-width:58ch;
+      font-size:18px;
+      color:var(--muted);
+    }
+
+    .hero-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-top:24px;
+    }
+
+    .hero-tags{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:18px;
+    }
+
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.05);
+      color:#ece4e0;
+      font-size:13px;
+      font-weight:700;
+    }
+
+    .hero-note{
+      margin-top:22px;
+      font-size:14px;
+      color:var(--muted);
+    }
+
+    .hero-panel{
+      padding:18px;
+      border-radius:28px;
+      background:linear-gradient(180deg, rgba(19,23,32,.98), rgba(14,17,24,.98));
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:0 24px 60px rgba(0,0,0,.36);
+    }
+
+    .panel-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:14px;
+    }
+
+    .panel-title{
+      font-size:16px;
+      font-weight:800;
+      font-family:"Space Grotesk","Inter",sans-serif;
+    }
+
+    .panel-sub{
+      margin-top:3px;
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .live{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid rgba(68,215,182,.16);
+      background:rgba(68,215,182,.10);
+      color:#dffff5;
+      font-size:12px;
+      font-weight:800;
+      white-space:nowrap;
+    }
+
+    .live::before{
+      content:"";
+      width:8px;
+      height:8px;
+      border-radius:999px;
+      background:var(--accent-3);
+      box-shadow:0 0 0 6px rgba(68,215,182,.10);
+    }
+
+    .activity-list{
+      display:grid;
+      gap:12px;
+    }
+
+    .activity{
+      display:grid;
+      grid-template-columns:auto 1fr auto;
+      gap:12px;
+      align-items:center;
+      padding:14px;
+      border-radius:18px;
+      background:rgba(255,255,255,.045);
+      border:1px solid rgba(255,255,255,.08);
+      transition:transform .18s ease, background .18s ease, border-color .18s ease;
+    }
+
+    .activity:hover{
+      transform:translateY(-2px);
+      background:rgba(255,255,255,.06);
+      border-color:rgba(255,255,255,.12);
+    }
+
+    .activity-icon{
+      width:44px;
+      height:44px;
+      border-radius:15px;
+      display:grid;
+      place-items:center;
+      font-size:21px;
+      background:linear-gradient(135deg, rgba(255,122,24,.16), rgba(255,77,141,.14));
+      border:1px solid rgba(255,255,255,.10);
+    }
+
+    .activity-name{
+      font-size:15px;
+      font-weight:800;
+      margin-bottom:2px;
+      font-family:"Space Grotesk","Inter",sans-serif;
+    }
+
+    .activity-meta{
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .activity-price{
+      white-space:nowrap;
+      padding:8px 10px;
+      border-radius:999px;
+      background:rgba(68,215,182,.10);
+      border:1px solid rgba(68,215,182,.16);
+      color:#dffcf4;
+      font-size:12px;
+      font-weight:800;
+    }
+
+    .panel-bottom{
+      margin-top:14px;
+      padding:16px;
+      border-radius:20px;
+      background:linear-gradient(135deg, rgba(255,122,24,.10), rgba(255,77,141,.08), rgba(68,215,182,.08));
+      border:1px solid rgba(255,255,255,.08);
+    }
+
+    .panel-bottom strong{
+      display:block;
+      margin-bottom:6px;
+      font-size:15px;
+      font-family:"Space Grotesk","Inter",sans-serif;
+    }
+
+    .panel-bottom span{
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .section-lg{
+      padding:56px 0;
+    }
+
+    .section-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:end;
+      gap:16px;
+      flex-wrap:wrap;
+      margin-bottom:18px;
+    }
+
+    .section-head h2{
+      margin:0;
+      font-size:clamp(30px, 4vw, 54px);
+      line-height:.95;
+      letter-spacing:-1.4px;
+    }
+
+    .section-head p{
+      margin:0;
+      max-width:55ch;
+      color:var(--muted);
+      font-size:16px;
+    }
+
+    .value-grid{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:16px;
+    }
+
+    .value-card{
+      padding:22px;
+    }
+
+    .value-icon{
+      width:48px;
+      height:48px;
+      display:grid;
+      place-items:center;
+      border-radius:16px;
+      margin-bottom:14px;
+      font-size:22px;
+      background:linear-gradient(135deg, rgba(255,122,24,.16), rgba(68,215,182,.12));
+      border:1px solid rgba(255,255,255,.10);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
+    }
+
+    .value-card h3,
+    .pricing-card h3,
+    .team-card h3{
+      margin:0 0 10px;
+      font-size:20px;
+      letter-spacing:-.3px;
+    }
+
+    .value-card p,
+    .pricing-card p,
+    .team-card p{
+      margin:0;
+      font-size:15px;
+      color:var(--muted);
+    }
+
+    .step-strip{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:14px;
+      margin-top:16px;
+    }
+
+    .step{
+      padding:18px;
+      border-radius:18px;
+      background:rgba(255,255,255,.045);
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:var(--shadow-soft);
+    }
+
+    .step-num{
+      width:34px;
+      height:34px;
+      display:grid;
+      place-items:center;
+      border-radius:999px;
+      margin-bottom:12px;
+      font-size:14px;
+      font-weight:900;
+      color:#180c04;
+      background:linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow:0 12px 24px rgba(255,122,24,.18);
+      font-family:"Space Grotesk","Inter",sans-serif;
+    }
+
+    .step h3{
+      margin:0 0 8px;
+      font-size:18px;
+    }
+
+    .step p{
+      margin:0;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .pricing-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+    }
+
+    .pricing-card{
+      position:relative;
+      overflow:hidden;
+      padding:28px;
+    }
+
+    .pricing-card.featured{
+      border-color:rgba(68,215,182,.22);
+      box-shadow:
+        0 24px 60px rgba(0,0,0,.34),
+        0 0 0 1px rgba(68,215,182,.08) inset;
+    }
+
+    .pricing-card.featured::before{
+      content:"Recommended";
+      position:absolute;
+      top:18px;
+      right:18px;
+      padding:8px 12px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:900;
+      color:#062118;
+      background:linear-gradient(135deg, #d6fff2, #8ff0cc);
+      box-shadow:0 12px 24px rgba(68,215,182,.22);
+      font-family:"Space Grotesk","Inter",sans-serif;
+    }
+
+    .price{
+      display:flex;
+      align-items:baseline;
+      gap:8px;
+      margin:6px 0 12px;
+    }
+
+    .price strong{
+      font-size:68px;
+      line-height:.9;
+      letter-spacing:-2px;
+      font-family:"Space Grotesk","Inter",sans-serif;
+    }
+
+    .price span{
+      color:var(--muted);
+      font-size:16px;
+    }
+
+    .pricing-list{
+      margin:14px 0 0;
+      padding-left:22px;
+      color:var(--muted);
+      font-size:15px;
+    }
+
+    .pricing-list li{
+      margin:10px 0;
+    }
+
+    .team-grid{
+      display:grid;
+      grid-template-columns:repeat(4, 1fr);
+      gap:16px;
+    }
+
+    .team-card{
+      padding:24px;
+      min-height:260px;
+      display:flex;
+      flex-direction:column;
+      justify-content:flex-start;
+    }
+
+    .avatar{
+      width:82px;
+      height:82px;
+      display:grid;
+      place-items:center;
+      border-radius:24px;
+      margin-bottom:18px;
+      font-size:38px;
+      font-weight:900;
+      color:#120e09;
+      background:linear-gradient(135deg, #7fd7ff, #84efc4);
+      box-shadow:
+        0 18px 36px rgba(54,179,165,.18),
+        inset 0 1px 0 rgba(255,255,255,.28);
+      font-family:"Space Grotesk","Inter",sans-serif;
+    }
+
+    .team-card h3{
+      margin:0;
+      font-size:20px;
+      line-height:1.15;
+      letter-spacing:-.3px;
+    }
+
+    .role{
+      display:inline-flex;
+      align-items:center;
+      width:fit-content;
+      margin-top:10px;
+      color:#e8edf7;
+      font-size:13px;
+      font-weight:800;
+      font-family:"Space Grotesk","Inter",sans-serif;
+      padding:8px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08);
+    }
+
+    .contact-shell{
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:18px;
+      align-items:stretch;
+    }
+
+    .contact-copy{
+      padding:28px;
+    }
+
+    .contact-copy h2{
+      margin:14px 0 12px;
+      font-size:clamp(32px, 4.4vw, 56px);
+      line-height:.95;
+      letter-spacing:-1.5px;
+    }
+
+    .contact-copy p{
+      margin:0;
+      max-width:54ch;
+      color:var(--muted);
+      font-size:16px;
+    }
+
+    .contact-mini{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-top:18px;
+    }
+
+    .contact-box{
+      padding:15px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.045);
+    }
+
+    .contact-box strong{
+      display:block;
+      margin-bottom:6px;
+      font-size:14px;
+      font-family:"Space Grotesk","Inter",sans-serif;
+    }
+
+    .contact-box span{
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .contact-form{
+      padding:28px;
+      display:flex;
+      align-items:center;
+    }
+
+    .form-card{
+      width:100%;
+      padding:18px;
+    }
+
+    .form-title{
+      font-size:20px;
+      font-weight:800;
+      font-family:"Space Grotesk","Inter",sans-serif;
+    }
+
+    .form-sub{
+      margin-top:4px;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    form{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      margin-top:16px;
+    }
+
+    input{
+      width:100%;
+      min-height:54px;
+      padding:14px 14px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.055);
+      color:var(--text);
+      outline:none;
+      font:inherit;
+      transition:
+        border-color .2s ease,
+        box-shadow .2s ease,
+        background .2s ease,
+        transform .2s ease;
+    }
+
+    input::placeholder{
+      color:rgba(191,198,215,.75);
+    }
+
+    input:focus{
+      border-color:rgba(255,122,24,.34);
+      box-shadow:0 0 0 4px rgba(255,122,24,.10);
+      background:rgba(255,255,255,.075);
+      transform:translateY(-1px);
+    }
+
+    .small{
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    footer{
+      padding:30px 0 42px;
+      border-top:1px solid rgba(255,255,255,.07);
+      color:var(--muted);
+    }
+
+    .footer-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+    }
+
+    .footer-links{
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+    }
+
+    .footer-links a:hover{
+      color:var(--text);
+    }
+
+    html.js body{
+      opacity:0;
+      transition:opacity .25s ease;
+    }
+
+    html.js body.loaded{
+      opacity:1;
+    }
+
+    html.js body.leaving{
+      opacity:0;
+    }
+
+    @media (max-width: 1080px){
+      .hero-inner,
+      .contact-shell{
+        grid-template-columns:1fr;
+      }
+
+      .team-grid{
+        grid-template-columns:repeat(2, 1fr);
+      }
+
+      .price strong{
+        font-size:58px;
+      }
+    }
+
+    @media (max-width: 920px){
+      .nav{
+        grid-template-columns:auto auto;
+        justify-content:space-between;
+      }
+
+      nav{
+        display:none;
+      }
+
+      .header-cta{
+        min-width:auto;
+        min-height:52px;
+        padding:12px 18px;
+      }
+
+      .value-grid,
+      .step-strip,
+      .pricing-grid,
+      .contact-mini{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media (max-width: 720px){
+      .wrap{
+        width:min(var(--max), calc(100% - 22px));
+      }
+
+      .hero-shell{
+        border-radius:26px;
+      }
+
+      .hero-inner,
+      .hero-panel,
+      .pricing-card,
+      .team-card,
+      .contact-copy,
+      .contact-form{
+        padding:18px;
+      }
+
+      .headline{
+        max-width:none;
+        letter-spacing:-1.5px;
+      }
+
+      .team-grid{
+        grid-template-columns:1fr;
+      }
+
+      .activity{
+        grid-template-columns:auto 1fr;
+      }
+
+      .activity-price{
+        grid-column:2;
+        justify-self:start;
+      }
+
+      .price strong{
+        font-size:50px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      html{
+        scroll-behavior:auto;
+      }
+
+      *,
+      *::before,
+      *::after{
+        transition:none !important;
+        animation:none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="noise"></div>
+
+  <header>
+    <div class="wrap nav">
+      <a class="brand" href="#top" aria-label="Back to top">
+        <div class="brand-mark"></div>
+        <div class="brand-copy">
+          <span class="brand-name">Nexus</span>
+          <span class="brand-sub">Sport starts with a connection</span>
+        </div>
+      </a>
+
+      <nav>
+        <a href="schedules.html">Schedules</a>
+        <a href="groups.html">Groups</a>
+        <a href="#why">Why Nexus</a>
+        <a href="#tarifs">Pricing</a>
+        <a href="#equipe">Team</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <a class="btn primary header-cta" href="groups.html">Join a group</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="wrap">
+        <div class="hero-shell">
+          <div class="hero-inner">
+            <div class="hero-left">
+              <div class="eyebrow">
+                <span class="dot"></span>
+                Student sports platform
+              </div>
+
+              <h1 class="headline">
+                <span class="accent">Your next game starts here</span>
+              </h1>
+
+              <p class="sub">
+                Nexus helps students turn the desire to play sports
+                into real activities: find partners, join a group,
+                share costs, and play together more often.
+              </p>
+
+              <div class="hero-actions">
+                <a class="btn primary" href="groups.html">View groups</a>
+                <a class="btn secondary" href="schedules.html">Check schedules</a>
+              </div>
+
+              <div class="hero-tags">
+                <span class="tag">⚡ more spontaneous</span>
+                <span class="tag">🤝 more social</span>
+                <span class="tag">💸 more affordable</span>
+              </div>
+            </div>
+
+            <div class="hero-right">
+              <div class="hero-panel">
+                <div class="panel-head">
+                  <div>
+                    <div class="panel-title">Activities ready to take shape</div>
+                    <div class="panel-sub">A simple preview of the Nexus experience</div>
+                  </div>
+                  <div class="live">In preparation</div>
+                </div>
+
+                <div class="activity-list">
+                  <div class="activity">
+                    <div class="activity-icon">🏸</div>
+                    <div>
+                      <div class="activity-name">Badminton • Thursday 6 PM</div>
+                      <div class="activity-meta">Claude-Robillard • mixed level</div>
+                    </div>
+                    <div class="activity-price">≈ $5.50 / person</div>
+                  </div>
+
+                  <div class="activity">
+                    <div class="activity-icon">🎾</div>
+                    <div>
+                      <div class="activity-name">Tennis • Saturday 2 PM</div>
+                      <div class="activity-meta">Martin-Luther-King Park • friendly</div>
+                    </div>
+                    <div class="activity-price">≈ $3.00 / person</div>
+                  </div>
+
+                  <div class="activity">
+                    <div class="activity-icon">🏀</div>
+                    <div>
+                      <div class="activity-name">Basketball • Tuesday 7 PM</div>
+                      <div class="activity-meta">Gymnasium • group still forming</div>
+                    </div>
+                    <div class="activity-price">shared fees</div>
+                  </div>
+                </div>
+
+                <div class="panel-bottom">
+                  <strong>Our mission:</strong>
+                  <span>Make sports more accessible, easier to organize, and more social for students</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-lg" id="why">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">
+              <span class="dot"></span>
+              Why Nexus
+            </div>
+            <h2>Less organizing. More energy.</h2>
+          </div>
+          <p>
+            The issue is not a lack of interest in sport. It is the difficulty of coordinating, finding people, and making the activity easy to launch.
+          </p>
+        </div>
+
+        <div class="value-grid">
+          <div class="card value-card">
+            <div class="value-icon">🤝</div>
+            <h3>Meet people</h3>
+            <p>
+              Join an activity even if you come alone and connect with other students who want to play.
+            </p>
+          </div>
+
+          <div class="card value-card">
+            <div class="value-icon">🗓️</div>
+            <h3>Play more easily</h3>
+            <p>
+              More clarity on groups, schedules, and available time slots, with less unnecessary organizing.
+            </p>
+          </div>
+
+          <div class="card value-card">
+            <div class="value-icon">💸</div>
+            <h3>Share costs</h3>
+            <p>
+              When fees are split between several players, it becomes easier to play regularly.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-lg" id="how">
+      <div class="wrap">
+        <div class="card" style="padding:24px;">
+          <div class="section-head" style="margin-bottom:14px;">
+            <div>
+              <div class="eyebrow">
+                <span class="dot"></span>
+                From the idea to the court
+              </div>
+              <h2>A simple path to take action.</h2>
+            </div>
+          </div>
+
+          <div class="step-strip">
+            <div class="step">
+              <div class="step-num">1</div>
+              <h3>Choose your sport</h3>
+              <p>
+                Find the activity or time slot that matches your energy, your level, and your schedule.
+              </p>
+            </div>
+
+            <div class="step">
+              <div class="step-num">2</div>
+              <h3>Join or create</h3>
+              <p>
+                Join an existing group or create your own in a few clicks.
+              </p>
+            </div>
+
+            <div class="step">
+              <div class="step-num">3</div>
+              <h3>Confirm and play</h3>
+              <p>
+                Once the right group comes together, the activity moves from idea to the court.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-lg" id="tarifs">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">
+              <span class="dot"></span>
+              A simple and clear model
+            </div>
+            <h2>Pricing designed to stay flexible at launch.</h2>
+          </div>
+        </div>
+
+        <div class="pricing-grid">
+          <div class="card pricing-card">
+            <h3>Pay per activity</h3>
+            <div class="price">
+              <strong>Flexible</strong>
+              <span>depending on the activity</span>
+            </div>
+            <p>
+              Transparent coordination fees are added to the activity to simplify
+              organization, matchmaking, and the overall experience.
+            </p>
+            <ul class="pricing-list">
+              <li>ideal for testing the platform</li>
+              <li>no long-term commitment</li>
+              <li>perfect for occasional play</li>
+            </ul>
+          </div>
+
+          <div class="card pricing-card featured">
+            <h3>Nexus Membership</h3>
+            <div class="price">
+              <strong>Scalable</strong>
+              <span>depending on the benefits offered</span>
+            </div>
+            <p>
+              A plan designed for more regular users, with potential benefits
+              on certain time slots, priorities, or rewards.
+            </p>
+            <ul class="pricing-list">
+              <li>better for frequent players</li>
+              <li>access to member benefits</li>
+              <li>a more sustainable vision of the sports community</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-lg" id="equipe">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">
+              <span class="dot"></span>
+              The Nexus team
+            </div>
+            <h2>A student team that wants to get sport moving again.</h2>
+          </div>
+          <p>
+            We are building Nexus to make sports simpler, more human, and more unifying
+            for young students in Montreal.
+          </p>
+        </div>
+
+        <div class="team-grid">
+          <div class="card team-card">
+            <div class="avatar">ZL</div>
+            <h3>Zhiheng Liu</h3>
+            <span class="role">Co-founder</span>
+          </div>
+
+          <div class="card team-card">
+            <div class="avatar">KE</div>
+            <h3>Kaeli Eklo</h3>
+            <span class="role">Co-founder</span>
+          </div>
+
+          <div class="card team-card">
+            <div class="avatar">JL</div>
+            <h3>Jake Letto</h3>
+            <span class="role">Co-founder</span>
+          </div>
+
+          <div class="card team-card">
+            <div class="avatar">HA</div>
+            <h3>Hemede Lashwana Adjiwanou</h3>
+            <span class="role">Co-founder</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-lg" id="contact">
+      <div class="wrap">
+        <div class="card contact-shell">
+          <div class="contact-copy">
+            <div class="eyebrow">
+              <span class="dot"></span>
+              Join the launch
+            </div>
+
+            <h2>Ready to play more often?</h2>
+            <p>
+              Leave your email to follow the launch of Nexus, discover the first activities,
+              and stay connected to a platform that wants to bring young people together through sport.
+            </p>
+
+            <div class="contact-mini">
+              <div class="contact-box">
+                <strong>First activities</strong>
+                <span>Be among the first to see available groups.</span>
+              </div>
+              <div class="contact-box">
+                <strong>Product evolution</strong>
+                <span>Discover the next Nexus updates.</span>
+              </div>
+              <div class="contact-box">
+                <strong>Community</strong>
+                <span>Stay connected to a student initiative that creates real bonds.</span>
+              </div>
+              <div class="contact-box">
+                <strong>Official launch</strong>
+                <span>Receive the information at the key moment to take action.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-form">
+            <div class="soft form-card">
+              <div class="form-title">Join the launch list</div>
+              <div class="form-sub">Simple, fast, frictionless.</div>
+
+              <form onsubmit="return handleSubmit(event)">
+                <input id="email" type="email" placeholder="Your email (e.g. firstname.lastname@...)" required />
+                <button class="btn primary" type="submit" style="width:100%;">Receive Nexus updates</button>
+                <a class="btn" href="groups.html" style="width:100%;">Explore groups</a>
+              </form>
+
+              <p class="small" id="msg" style="margin-top:12px;"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="wrap footer-row">
+        <div>© <span id="year"></span> Nexus • Student project — Collège Jean-de-Brébeuf</div>
+
+        <div class="footer-links">
+          <a href="#why">Why Nexus</a>
+          <a href="#tarifs">Pricing</a>
+          <a href="#equipe">Team</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    function handleSubmit(e){
+      e.preventDefault();
+
+      const email = document.getElementById("email").value.trim();
+      const msg = document.getElementById("msg");
+
+      if(!email){
+        msg.textContent = "Please enter a valid email.";
+        return false;
+      }
+
+      const list = JSON.parse(localStorage.getItem("waitlist_emails_en") || "[]");
+
+      if(!list.includes(email)) list.push(email);
+
+      localStorage.setItem("waitlist_emails_en", JSON.stringify(list));
+
+      msg.textContent = "Thank you! You are on the Nexus launch list ✅";
+      document.getElementById("email").value = "";
+      return false;
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      document.body.classList.add("loaded");
+    });
+
+    document.addEventListener("click", (e) => {
+      const a = e.target.closest("a");
+      if(!a) return;
+
+      const href = a.getAttribute("href") || "";
+
+      if(href.startsWith("#")) return;
+      if(a.target === "_blank") return;
+      if(href.startsWith("http")) return;
+      if(href.startsWith("mailto:") || href.startsWith("tel:")) return;
+
+      e.preventDefault();
+      document.body.classList.add("leaving");
+      setTimeout(() => { window.location.href = href; }, 220);
+    });
+  </script>
+</body>
+</html>
