@@ -1,0 +1,1309 @@
+<!doctype html>
+<html lang="fr-CA">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Portail organisateur — Nexus</title>
+  <meta
+    name="description"
+    content="Portail démo pour clubs et organisateurs sur Nexus : profil, activités, suivi d'intérêt et mini analytics."
+  />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <style>
+    :root{
+      --bg:#0e1016;
+      --card:#131a25;
+      --text:#f3f5fb;
+      --muted:#b8c0d2;
+      --line:#243042;
+      --line-soft:rgba(255,255,255,.08);
+      --accent:#ff7a18;
+      --accent2:#ff9a3d;
+      --accent3:#ffb15e;
+      --accent4:#44d7b6;
+      --warn:#ffd36a;
+      --bad:#ff7e7e;
+      --ok:#42d7b5;
+      --radius:18px;
+      --shadow:0 12px 30px rgba(0,0,0,.35);
+      --max:1180px;
+
+      --select-bg:rgba(255,255,255,.055);
+      --select-bg-strong:rgba(255,255,255,.075);
+      --select-border:rgba(255,255,255,.12);
+      --option-bg:#1a130e;
+      --option-text:#fff4ea;
+    }
+
+    *{ box-sizing:border-box; }
+    html{ background:#0e1016; color-scheme:dark; }
+
+    body{
+      margin:0;
+      font-family:"Inter",ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+      background:
+        radial-gradient(900px 520px at 12% -10%, rgba(255,122,24,.17), transparent 55%),
+        radial-gradient(760px 440px at 88% 6%, rgba(255,77,141,.12), transparent 56%),
+        radial-gradient(620px 340px at 95% 95%, rgba(66,215,181,.10), transparent 54%),
+        linear-gradient(180deg, #0e1016 0%, #111722 55%, #0d1118 100%);
+      color:var(--text);
+      line-height:1.5;
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+      opacity:0;
+      transition:opacity .25s ease;
+    }
+
+    body.loaded{ opacity:1; }
+    body.leaving{ opacity:0; }
+
+    a{ color:inherit; text-decoration:none; }
+    .wrap{ max-width:var(--max); margin:0 auto; padding:22px; }
+
+    header{
+      position:sticky;
+      top:0;
+      backdrop-filter:blur(14px);
+      background:rgba(14,16,22,.76);
+      border-bottom:1px solid rgba(255,255,255,.06);
+      z-index:20;
+    }
+
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+    }
+
+    .brand,
+    h1,h2,h3,
+    .section-title,
+    .stat-value,
+    .session-title,
+    .btn{
+      font-family:"Space Grotesk","Inter",system-ui,sans-serif;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:800;
+      letter-spacing:.2px;
+    }
+
+    .dot{
+      width:12px;
+      height:12px;
+      border-radius:999px;
+      background:linear-gradient(135deg, var(--accent), var(--accent3));
+      box-shadow:
+        0 0 0 4px rgba(255,122,24,.12),
+        0 0 18px rgba(255,122,24,.16);
+    }
+
+    nav{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    nav a{
+      padding:8px 10px;
+      border-radius:999px;
+      font-weight:700;
+      transition:background .18s ease, color .18s ease, transform .18s ease;
+    }
+
+    nav a:hover,
+    nav a.active{
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      transform:translateY(-1px);
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      gap:10px;
+      font-weight:800;
+      cursor:pointer;
+      user-select:none;
+      transition:
+        transform .18s ease,
+        background .18s ease,
+        box-shadow .18s ease,
+        filter .18s ease;
+      box-shadow:0 10px 22px rgba(0,0,0,.14);
+    }
+
+    .btn:hover{
+      transform:translateY(-1px);
+      background:rgba(255,255,255,.09);
+      box-shadow:0 14px 28px rgba(0,0,0,.18);
+    }
+
+    .btn.primary{
+      border:none;
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      color:#1a0f08;
+      box-shadow:0 14px 26px rgba(255,122,24,.20);
+    }
+
+    .btn.secondary{
+      border:none;
+      background:linear-gradient(135deg, #b8ffe7, var(--accent4));
+      color:#081510;
+    }
+
+    .btn.warn{
+      border:none;
+      background:linear-gradient(135deg, #ffe08a, #ffd36a, #ffb703);
+      color:#1a1200;
+    }
+
+    .btn.danger{
+      border:1px solid rgba(255,126,126,.30);
+      background:rgba(255,126,126,.10);
+      color:#ffdede;
+    }
+
+    .btn.small{
+      padding:8px 12px;
+      font-size:13px;
+    }
+
+    .card{
+      background:rgba(19,26,37,.84);
+      border:1px solid rgba(36,48,66,.92);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+
+    .hero{
+      padding:18px;
+    }
+
+    h1{
+      margin:0;
+      font-size:28px;
+      letter-spacing:-.5px;
+    }
+
+    .sub{
+      margin-top:8px;
+      color:var(--muted);
+      font-size:14px;
+      max-width:78ch;
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(4, 1fr);
+      gap:12px;
+      margin-top:16px;
+    }
+
+    .stat{
+      padding:16px;
+      border-radius:16px;
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.08);
+    }
+
+    .stat-value{
+      font-size:30px;
+      line-height:1;
+      letter-spacing:-1px;
+      margin-bottom:6px;
+    }
+
+    .stat-label{
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .toolbar{
+      margin-top:14px;
+      padding:14px 16px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      border-top:1px solid rgba(36,48,66,.72);
+    }
+
+    .row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    .input, select, textarea{
+      flex:1 1 220px;
+      padding:12px 12px;
+      border-radius:12px;
+      border:1px solid var(--select-border);
+      background:var(--select-bg);
+      color:var(--text);
+      outline:none;
+      font-size:14px;
+      font-weight:700;
+      letter-spacing:.2px;
+      font-family:"Inter",system-ui,sans-serif;
+      transition:
+        background-color .18s cubic-bezier(.2,.9,.2,1),
+        border-color .18s cubic-bezier(.2,.9,.2,1),
+        box-shadow .18s cubic-bezier(.2,.9,.2,1),
+        transform .14s cubic-bezier(.2,.9,.2,1);
+    }
+
+    textarea{
+      min-height:96px;
+      resize:vertical;
+    }
+
+    .input::placeholder,
+    textarea::placeholder{
+      color:rgba(184,192,210,.62);
+      font-weight:700;
+    }
+
+    select{
+      appearance:none;
+      -webkit-appearance:none;
+      -moz-appearance:none;
+      background-color:var(--select-bg-strong);
+      padding-right:44px;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath fill='%23d6deef' d='M5.5 7.5a1 1 0 0 1 1.4 0L10 10.6l3.1-3.1a1 1 0 1 1 1.4 1.4l-3.8 3.8a1 1 0 0 1-1.4 0L5.5 8.9a1 1 0 0 1 0-1.4Z'/%3E%3C/svg%3E");
+      background-repeat:no-repeat;
+      background-position:right 12px center;
+      background-size:18px 18px;
+    }
+
+    select option{
+      background:var(--option-bg);
+      color:var(--option-text);
+      font-weight:700;
+    }
+
+    .input:hover,
+    select:hover,
+    textarea:hover{
+      background:rgba(255,255,255,.08);
+    }
+
+    .input:focus,
+    select:focus,
+    textarea:focus{
+      background:rgba(255,255,255,.09);
+      border-color:rgba(255,122,24,.42);
+      box-shadow:0 0 0 4px rgba(255,122,24,.10);
+      transform:translateY(-1px) scale(1.012);
+    }
+
+    .hint{
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .pill{
+      display:inline-flex;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.045);
+      color:var(--muted);
+      font-size:12px;
+      gap:6px;
+      align-items:center;
+    }
+
+    .pill.ok{
+      border-color:rgba(66,215,181,.24);
+      background:rgba(66,215,181,.10);
+      color:#ddfff5;
+    }
+
+    .pill.warn{
+      border-color:rgba(255,211,106,.24);
+      background:rgba(255,211,106,.08);
+      color:#fff2d0;
+    }
+
+    .pill.bad{
+      border-color:rgba(255,126,126,.24);
+      background:rgba(255,126,126,.08);
+      color:#ffdede;
+    }
+
+    .layout{
+      display:grid;
+      grid-template-columns:1.18fr .82fr;
+      gap:14px;
+      margin-top:14px;
+      align-items:start;
+    }
+
+    .section-head{
+      padding:14px 16px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .section-title{
+      font-size:18px;
+      font-weight:800;
+    }
+
+    .list{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      padding:0 16px 16px;
+    }
+
+    .session{
+      padding:14px 16px;
+    }
+
+    .session-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .session-title{
+      font-size:17px;
+      font-weight:850;
+      letter-spacing:.1px;
+    }
+
+    .meta{
+      margin-top:8px;
+      color:var(--muted);
+      font-size:13px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+    }
+
+    .actions{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:flex-end;
+    }
+
+    .progress{
+      margin-top:12px;
+    }
+
+    .progress-top{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      font-size:12px;
+      color:var(--muted);
+      margin-bottom:6px;
+    }
+
+    .bar{
+      height:10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.06);
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.08);
+    }
+
+    .bar > span{
+      display:block;
+      height:100%;
+      width:0;
+      background:linear-gradient(135deg, var(--accent), var(--accent4));
+    }
+
+    details{
+      margin-top:12px;
+      border-top:1px solid rgba(255,255,255,.08);
+      padding-top:10px;
+    }
+
+    summary{
+      cursor:pointer;
+      color:var(--muted);
+      font-weight:700;
+      list-style:none;
+      font-family:"Space Grotesk","Inter",system-ui,sans-serif;
+    }
+
+    summary::-webkit-details-marker{ display:none; }
+
+    .detail-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-top:10px;
+    }
+
+    .box{
+      padding:12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.04);
+    }
+
+    .box h3{
+      margin:0 0 6px;
+      font-size:14px;
+      font-family:"Space Grotesk","Inter",system-ui,sans-serif;
+    }
+
+    .box p,
+    .box li{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .box ul{
+      margin:8px 0 0;
+      padding-left:18px;
+    }
+
+    .sidebar{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
+
+    .panel{
+      padding:14px 16px 16px;
+    }
+
+    .split{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
+    .lead-list{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      margin-top:12px;
+    }
+
+    .lead{
+      padding:12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.04);
+    }
+
+    .lead strong{
+      display:block;
+      margin-bottom:4px;
+      font-size:14px;
+    }
+
+    .lead span{
+      display:block;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.45;
+    }
+
+    .empty{
+      padding:14px;
+      color:var(--muted);
+      font-size:14px;
+      border:1px dashed rgba(255,255,255,.10);
+      border-radius:14px;
+      background:rgba(255,255,255,.03);
+    }
+
+    .toast{
+      position:fixed;
+      left:50%;
+      transform:translateX(-50%);
+      bottom:18px;
+      background:rgba(16,24,39,.92);
+      border:1px solid rgba(255,255,255,.12);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:12px;
+      box-shadow:var(--shadow);
+      z-index:50;
+      display:none;
+      max-width:min(720px, 92vw);
+    }
+
+    footer{
+      margin-top:18px;
+      padding:18px 0 34px;
+      border-top:1px solid rgba(36,48,66,.72);
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    @media (max-width:1080px){
+      .stats{ grid-template-columns:repeat(2, 1fr); }
+      .layout{ grid-template-columns:1fr; }
+    }
+
+    @media (max-width:880px){
+      nav{ display:none; }
+      .stats{ grid-template-columns:1fr 1fr; }
+      .split,
+      .detail-grid{ grid-template-columns:1fr; }
+    }
+
+    @media (max-width:640px){
+      .stats{ grid-template-columns:1fr; }
+      .hero{ padding:16px; }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      *{ transition:none !important; animation:none !important; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap nav">
+      <div class="brand">
+        <div class="dot"></div>
+        <div>Nexus</div>
+      </div>
+
+      <nav>
+        <a href="index.html">Accueil</a>
+        <a href="organisateurs.html">Page organisateurs</a>
+        <a href="portail-organisateur.html" class="active">Portail</a>
+      </nav>
+
+      <a class="btn" href="organisateurs.html">← Retour</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="card hero">
+      <h1>Portail organisateur</h1>
+      <p class="sub">
+        Gère ton profil club, publie des créneaux, suis l’intérêt généré et visualise rapidement
+        quelles activités semblent prêtes à mieux performer sur Nexus.
+      </p>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-value" id="statDraft">0</div>
+          <div class="stat-label">Brouillons</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" id="statPublished">0</div>
+          <div class="stat-label">Activités publiées</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" id="statRegistrations">0</div>
+          <div class="stat-label">Inscriptions simulées</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" id="statFill">0%</div>
+          <div class="stat-label">Taux de remplissage moyen</div>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <div class="row">
+          <input id="search" class="input" placeholder="Rechercher : tennis, jeudi, débutant, centre..." />
+          <select id="statusFilter">
+            <option value="">Statut (tous)</option>
+            <option value="published">Publié</option>
+            <option value="draft">Brouillon</option>
+          </select>
+          <select id="sportFilter">
+            <option value="">Sport (tous)</option>
+            <option>Badminton</option>
+            <option>Tennis</option>
+            <option>Basket</option>
+            <option>Volleyball</option>
+            <option>Natation</option>
+            <option>Soccer</option>
+            <option>Multi</option>
+          </select>
+          <button class="btn small" id="resetFilters" type="button">Reset filtres</button>
+        </div>
+
+        <div class="hint">
+          Démo locale : toutes les données sont enregistrées dans le navigateur avec localStorage.
+        </div>
+      </div>
+    </section>
+
+    <div class="layout">
+      <section class="card">
+        <div class="section-head">
+          <div>
+            <div class="section-title">Activités du club</div>
+            <div class="hint" id="count">0 activité affichée</div>
+          </div>
+
+          <div class="row">
+            <span class="pill ok">Publié</span>
+            <span class="pill warn">Brouillon</span>
+          </div>
+        </div>
+
+        <div class="list" id="sessions"></div>
+      </section>
+
+      <aside class="sidebar">
+        <section class="card panel">
+          <div class="section-title">Profil organisateur</div>
+          <div class="hint" style="margin-top:6px;">Ces informations seront réutilisées dans les prochaines activités.</div>
+
+          <div class="row" style="margin-top:12px;">
+            <input id="clubName" class="input" placeholder="Nom du club ou de l’organisation" />
+          </div>
+
+          <div class="split" style="margin-top:10px;">
+            <input id="contactName" class="input" placeholder="Nom du contact" />
+            <input id="contactEmail" class="input" type="email" placeholder="Email du contact" />
+          </div>
+
+          <div class="split" style="margin-top:10px;">
+            <select id="clubSport">
+              <option value="">Sport principal</option>
+              <option>Badminton</option>
+              <option>Tennis</option>
+              <option>Basket</option>
+              <option>Volleyball</option>
+              <option>Natation</option>
+              <option>Soccer</option>
+              <option>Multi</option>
+            </select>
+            <input id="city" class="input" placeholder="Ville / secteur" />
+          </div>
+
+          <div class="row" style="margin-top:12px;">
+            <button class="btn primary" id="saveProfile" type="button">Enregistrer le profil</button>
+          </div>
+        </section>
+
+        <section class="card panel">
+          <div class="section-title">Créer une activité</div>
+          <div class="hint" style="margin-top:6px;">Crée une activité publiable ou sauvegarde-la d’abord comme brouillon.</div>
+
+          <div class="row" style="margin-top:12px;">
+            <input id="title" class="input" placeholder="Titre (ex. Tennis débutant du samedi)" />
+          </div>
+
+          <div class="split" style="margin-top:10px;">
+            <select id="sport">
+              <option value="">Sport</option>
+              <option>Badminton</option>
+              <option>Tennis</option>
+              <option>Basket</option>
+              <option>Volleyball</option>
+              <option>Natation</option>
+              <option>Soccer</option>
+              <option>Multi</option>
+            </select>
+
+            <select id="level">
+              <option>Mixte</option>
+              <option>Débutant</option>
+              <option>Intermédiaire</option>
+              <option>Avancé</option>
+            </select>
+          </div>
+
+          <div class="split" style="margin-top:10px;">
+            <input id="location" class="input" placeholder="Lieu" />
+            <input id="audience" class="input" placeholder="Public visé (ados, étudiants...)" />
+          </div>
+
+          <div class="split" style="margin-top:10px;">
+            <input id="day" class="input" placeholder="Jour (ex. Samedi)" />
+            <input id="time" class="input" placeholder="Heure (ex. 14:00)" />
+          </div>
+
+          <div class="split" style="margin-top:10px;">
+            <input id="capacity" class="input" type="number" min="1" placeholder="Capacité" />
+            <input id="price" class="input" type="number" min="0" step="0.01" placeholder="Prix / personne" />
+          </div>
+
+          <div class="row" style="margin-top:10px;">
+            <textarea id="notes" placeholder="Notes : matériel, niveau attendu, détails logistiques..."></textarea>
+          </div>
+
+          <div class="row" style="margin-top:12px;">
+            <button class="btn primary" id="createSession" type="button">Publier l’activité</button>
+            <button class="btn warn" id="createDraft" type="button">Créer un brouillon</button>
+          </div>
+        </section>
+
+        <section class="card panel">
+          <div class="section-title">Leads organisateurs</div>
+          <div class="hint" style="margin-top:6px;">
+            Récupérés depuis la page organisateurs si tu utilises la même clé localStorage.
+          </div>
+
+          <div class="row" style="margin-top:12px;">
+            <button class="btn small" id="loadLeadsBtn" type="button">Actualiser</button>
+            <button class="btn small danger" id="clearSessions" type="button">Effacer activités</button>
+            <button class="btn small secondary" id="seedDemo" type="button">Ajouter démos</button>
+          </div>
+
+          <div class="lead-list" id="leadList"></div>
+        </section>
+      </aside>
+    </div>
+
+    <footer>
+      © <span id="year"></span> Nexus • Portail organisateur démo
+    </footer>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const SESSION_KEY = "nexus_organizer_sessions_fr_v1";
+    const PROFILE_KEY = "nexus_organizer_profile_fr_v1";
+    const LEAD_KEYS = ["nexus_organizer_leads_fr_v1", "nexus_organizer_leads_fr"];
+    const $ = (id) => document.getElementById(id);
+
+    function uid(){
+      return Math.random().toString(16).slice(2) + Date.now().toString(16);
+    }
+
+    function escapeHtml(value){
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function money(value){
+      const n = Number(value);
+      if(!isFinite(n)) return "—";
+      return n.toFixed(2) + " $";
+    }
+
+    function loadJSON(key, fallback){
+      try{
+        return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback));
+      }catch{
+        return fallback;
+      }
+    }
+
+    function loadSessions(){
+      return loadJSON(SESSION_KEY, []);
+    }
+
+    function saveSessions(items){
+      localStorage.setItem(SESSION_KEY, JSON.stringify(items));
+    }
+
+    function loadProfile(){
+      return loadJSON(PROFILE_KEY, {});
+    }
+
+    function saveProfile(profile){
+      localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+    }
+
+    function loadLeads(){
+      for(const key of LEAD_KEYS){
+        const data = loadJSON(key, null);
+        if(Array.isArray(data) && data.length) return data;
+      }
+      return [];
+    }
+
+    function toast(message){
+      const node = $("toast");
+      node.textContent = message;
+      node.style.display = "block";
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(() => {
+        node.style.display = "none";
+      }, 2400);
+    }
+
+    function fillRate(session){
+      const reg = Number(session.registrations) || 0;
+      const cap = Number(session.capacity) || 0;
+      if(cap <= 0) return 0;
+      return Math.min(100, Math.round((reg / cap) * 100));
+    }
+
+    function seedIfEmpty(){
+      const current = loadSessions();
+      if(current.length) return;
+
+      const profile = loadProfile();
+      const clubName = profile.clubName || "Club Nexus Démo";
+      const contactName = profile.contactName || "Responsable Nexus";
+      const contactEmail = profile.contactEmail || "contact@nexus.demo";
+
+      const demo = [
+        {
+          id: uid(),
+          title: "Badminton étudiant — jeudi 18h",
+          sport: "Badminton",
+          level: "Intermédiaire",
+          location: "Claude-Robillard",
+          audience: "Étudiants",
+          day: "Jeudi",
+          time: "18:00",
+          capacity: 12,
+          registrations: 8,
+          price: 8.5,
+          notes: "Raquette recommandée. Groupe amical mais dynamique.",
+          status: "published",
+          clubName,
+          contactName,
+          contactEmail,
+          createdAt: Date.now() - 500000
+        },
+        {
+          id: uid(),
+          title: "Tennis initiation — samedi",
+          sport: "Tennis",
+          level: "Débutant",
+          location: "Parc Martin-Luther-King",
+          audience: "Jeunes 14-20",
+          day: "Samedi",
+          time: "14:00",
+          capacity: 8,
+          registrations: 3,
+          price: 6,
+          notes: "Parfait pour tester le sport. Matériel prêté selon disponibilité.",
+          status: "published",
+          clubName,
+          contactName,
+          contactEmail,
+          createdAt: Date.now() - 400000
+        },
+        {
+          id: uid(),
+          title: "Basket libre du mardi",
+          sport: "Basket",
+          level: "Mixte",
+          location: "Gymnase BdeB",
+          audience: "Secondaire / cégep",
+          day: "Mardi",
+          time: "19:00",
+          capacity: 16,
+          registrations: 0,
+          price: 5,
+          notes: "Créneau à confirmer selon la demande.",
+          status: "draft",
+          clubName,
+          contactName,
+          contactEmail,
+          createdAt: Date.now() - 300000
+        }
+      ];
+
+      saveSessions(demo);
+    }
+
+    function updateStats(sessions){
+      const drafts = sessions.filter(s => s.status === "draft").length;
+      const published = sessions.filter(s => s.status === "published").length;
+      const totalRegs = sessions.reduce((sum, s) => sum + (Number(s.registrations) || 0), 0);
+      const averageFill = sessions.length
+        ? Math.round(sessions.reduce((sum, s) => sum + fillRate(s), 0) / sessions.length)
+        : 0;
+
+      $("statDraft").textContent = drafts;
+      $("statPublished").textContent = published;
+      $("statRegistrations").textContent = totalRegs;
+      $("statFill").textContent = averageFill + "%";
+    }
+
+    function renderLeads(){
+      const leads = loadLeads();
+      const container = $("leadList");
+
+      if(!leads.length){
+        container.innerHTML = `<div class="empty">Aucune organisation inscrite pour l’instant depuis la page organisateurs.</div>`;
+        return;
+      }
+
+      container.innerHTML = leads.slice(0, 8).map(lead => `
+        <div class="lead">
+          <strong>${escapeHtml(lead.club || "Organisation")}</strong>
+          <span>${escapeHtml(lead.name || "—")} • ${escapeHtml(lead.email || "—")}</span>
+          <span>${escapeHtml(lead.sport || "Sport non précisé")} • langue : ${escapeHtml(lead.lang || "—")}</span>
+        </div>
+      `).join("");
+    }
+
+    function renderProfile(){
+      const profile = loadProfile();
+      $("clubName").value = profile.clubName || "";
+      $("contactName").value = profile.contactName || "";
+      $("contactEmail").value = profile.contactEmail || "";
+      $("clubSport").value = profile.clubSport || "";
+      $("city").value = profile.city || "";
+    }
+
+    function sessionShareText(session){
+      return `${session.clubName || "Club"} — ${session.title} | ${session.day} ${session.time} | ${session.location} | ${session.sport} | ${session.capacity} places | ${session.price ? money(session.price) + " / pers" : "gratuit"}`;
+    }
+
+    async function copyText(text){
+      try{
+        await navigator.clipboard.writeText(text);
+        toast("Texte copié ✅");
+      }catch{
+        toast("Copie non disponible dans ce navigateur.");
+      }
+    }
+
+    function renderSessions(){
+      const all = loadSessions().sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+
+      const term = $("search").value.trim().toLowerCase();
+      const status = $("statusFilter").value;
+      const sport = $("sportFilter").value;
+
+      const filtered = all.filter(session => {
+        const blob = `${session.title} ${session.sport} ${session.level} ${session.location} ${session.audience} ${session.notes} ${session.clubName}`.toLowerCase();
+        if(term && !blob.includes(term)) return false;
+        if(status && session.status !== status) return false;
+        if(sport && session.sport !== sport) return false;
+        return true;
+      });
+
+      $("count").textContent = `${filtered.length} activité(s) affichée(s) • ${all.length} total`;
+      updateStats(all);
+
+      const container = $("sessions");
+
+      if(!filtered.length){
+        container.innerHTML = `<div class="empty">Aucune activité trouvée. Essaie un autre filtre ou crée une nouvelle activité à droite.</div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(session => {
+        const fill = fillRate(session);
+        const badge = session.status === "published"
+          ? `<span class="pill ok">Publié</span>`
+          : `<span class="pill warn">Brouillon</span>`;
+
+        return `
+          <div class="card session">
+            <div class="session-head">
+              <div>
+                <div class="row" style="gap:8px;">
+                  <div class="session-title">${escapeHtml(session.title)}</div>
+                  ${badge}
+                  <span class="pill">${escapeHtml(session.sport || "—")}</span>
+                  <span class="pill">${escapeHtml(session.level || "—")}</span>
+                </div>
+
+                <div class="meta">
+                  <span>📍 ${escapeHtml(session.location || "—")}</span>
+                  <span>🗓️ ${escapeHtml(session.day || "—")} • ${escapeHtml(session.time || "—")}</span>
+                  <span>👥 ${escapeHtml(session.registrations || 0)} / ${escapeHtml(session.capacity || 0)}</span>
+                  <span>💰 ${Number(session.price) > 0 ? money(session.price) + " / pers" : "gratuit"}</span>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn small ${session.status === "published" ? "" : "primary"}" data-act="toggle" data-id="${session.id}">
+                  ${session.status === "published" ? "Dépublier" : "Publier"}
+                </button>
+                <button class="btn small" data-act="boost" data-id="${session.id}">+ intérêt</button>
+                <button class="btn small" data-act="copy" data-id="${session.id}">Copier</button>
+                <button class="btn small danger" data-act="delete" data-id="${session.id}">Supprimer</button>
+              </div>
+            </div>
+
+            <div class="progress">
+              <div class="progress-top">
+                <span>Taux de remplissage</span>
+                <span>${fill}%</span>
+              </div>
+              <div class="bar"><span style="width:${fill}%;"></span></div>
+            </div>
+
+            <details>
+              <summary>Voir les détails</summary>
+
+              <div class="detail-grid">
+                <div class="box">
+                  <h3>Notes logistiques</h3>
+                  <p>${escapeHtml(session.notes || "—")}</p>
+                  <ul>
+                    <li>Public visé : ${escapeHtml(session.audience || "—")}</li>
+                    <li>Club : ${escapeHtml(session.clubName || "—")}</li>
+                    <li>Contact : ${escapeHtml(session.contactName || "—")} • ${escapeHtml(session.contactEmail || "—")}</li>
+                  </ul>
+                </div>
+
+                <div class="box">
+                  <h3>Actions rapides</h3>
+                  <ul>
+                    <li>Dupliquer cette activité sur une autre date</li>
+                    <li>Exporter un texte promo</li>
+                    <li>Repérer si le créneau mérite une relance</li>
+                  </ul>
+
+                  <div class="row" style="margin-top:10px;">
+                    <button class="btn small warn" data-act="duplicate" data-id="${session.id}">Dupliquer</button>
+                    <button class="btn small secondary" data-act="copy" data-id="${session.id}">Texte promo</button>
+                  </div>
+                </div>
+              </div>
+            </details>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function saveProfileFromUI(){
+      const profile = {
+        clubName: $("clubName").value.trim(),
+        contactName: $("contactName").value.trim(),
+        contactEmail: $("contactEmail").value.trim(),
+        clubSport: $("clubSport").value,
+        city: $("city").value.trim()
+      };
+
+      saveProfile(profile);
+      toast("Profil enregistré.");
+    }
+
+    function createSession(status){
+      const profile = loadProfile();
+
+      const title = $("title").value.trim();
+      const sport = $("sport").value || profile.clubSport || "";
+      const level = $("level").value;
+      const location = $("location").value.trim();
+      const audience = $("audience").value.trim();
+      const day = $("day").value.trim();
+      const time = $("time").value.trim();
+      const capacity = Number($("capacity").value || 0);
+      const price = Number($("price").value || 0);
+      const notes = $("notes").value.trim();
+
+      if(!title || !sport || !location || !day || !time || !capacity){
+        toast("Remplis au minimum le titre, le sport, le lieu, le jour, l’heure et la capacité.");
+        return;
+      }
+
+      const session = {
+        id: uid(),
+        title,
+        sport,
+        level: level || "Mixte",
+        location,
+        audience: audience || "Public à définir",
+        day,
+        time,
+        capacity,
+        registrations: 0,
+        price: isFinite(price) ? price : 0,
+        notes,
+        status,
+        clubName: profile.clubName || "Organisation Nexus",
+        contactName: profile.contactName || "Responsable",
+        contactEmail: profile.contactEmail || "contact@example.com",
+        createdAt: Date.now()
+      };
+
+      const sessions = loadSessions();
+      sessions.unshift(session);
+      saveSessions(sessions);
+
+      ["title","sport","level","location","audience","day","time","capacity","price","notes"].forEach(id => {
+        $(id).value = "";
+      });
+
+      renderSessions();
+      toast(status === "published" ? "Activité publiée ✅" : "Brouillon créé ✅");
+    }
+
+    function toggleSession(id){
+      const sessions = loadSessions();
+      const target = sessions.find(s => s.id === id);
+      if(!target) return;
+
+      target.status = target.status === "published" ? "draft" : "published";
+      saveSessions(sessions);
+      renderSessions();
+      toast(target.status === "published" ? "Activité publiée." : "Activité repassée en brouillon.");
+    }
+
+    function deleteSession(id){
+      const sessions = loadSessions().filter(s => s.id !== id);
+      saveSessions(sessions);
+      renderSessions();
+      toast("Activité supprimée.");
+    }
+
+    function duplicateSession(id){
+      const sessions = loadSessions();
+      const target = sessions.find(s => s.id === id);
+      if(!target) return;
+
+      const clone = {
+        ...target,
+        id: uid(),
+        title: target.title + " (copie)",
+        status: "draft",
+        registrations: 0,
+        createdAt: Date.now()
+      };
+
+      sessions.unshift(clone);
+      saveSessions(sessions);
+      renderSessions();
+      toast("Activité dupliquée en brouillon.");
+    }
+
+    function boostInterest(id){
+      const sessions = loadSessions();
+      const target = sessions.find(s => s.id === id);
+      if(!target) return;
+
+      const cap = Number(target.capacity) || 0;
+      const reg = Number(target.registrations) || 0;
+
+      if(reg >= cap){
+        toast("Cette activité est déjà complète.");
+        return;
+      }
+
+      target.registrations = reg + 1;
+      saveSessions(sessions);
+      renderSessions();
+      toast("+1 inscription simulée.");
+    }
+
+    function clearSessions(){
+      localStorage.removeItem(SESSION_KEY);
+      renderSessions();
+      toast("Activités effacées.");
+    }
+
+    function seedDemo(){
+      localStorage.removeItem(SESSION_KEY);
+      seedIfEmpty();
+      renderSessions();
+      toast("Données démo ajoutées.");
+    }
+
+    function resetFilters(){
+      $("search").value = "";
+      $("statusFilter").value = "";
+      $("sportFilter").value = "";
+      renderSessions();
+    }
+
+    function init(){
+      seedIfEmpty();
+      renderProfile();
+      renderLeads();
+      renderSessions();
+
+      $("year").textContent = new Date().getFullYear();
+
+      ["search", "statusFilter", "sportFilter"].forEach(id => {
+        $(id).addEventListener("input", renderSessions);
+        $(id).addEventListener("change", renderSessions);
+      });
+
+      $("saveProfile").addEventListener("click", saveProfileFromUI);
+      $("loadLeadsBtn").addEventListener("click", () => {
+        renderLeads();
+        toast("Leads actualisés.");
+      });
+
+      $("createSession").addEventListener("click", () => createSession("published"));
+      $("createDraft").addEventListener("click", () => createSession("draft"));
+      $("resetFilters").addEventListener("click", resetFilters);
+      $("clearSessions").addEventListener("click", clearSessions);
+      $("seedDemo").addEventListener("click", seedDemo);
+
+      document.addEventListener("click", (e) => {
+        const action = e.target.closest("[data-act]");
+        if(!action) return;
+
+        const id = action.getAttribute("data-id");
+        const act = action.getAttribute("data-act");
+
+        if(act === "toggle") toggleSession(id);
+        if(act === "delete") deleteSession(id);
+        if(act === "duplicate") duplicateSession(id);
+        if(act === "boost") boostInterest(id);
+
+        if(act === "copy"){
+          const session = loadSessions().find(s => s.id === id);
+          if(session) copyText(sessionShareText(session));
+        }
+      });
+
+      window.addEventListener("DOMContentLoaded", () => {
+        document.body.classList.add("loaded");
+      });
+
+      document.addEventListener("click", (e) => {
+        const a = e.target.closest("a");
+        if(!a) return;
+
+        const href = a.getAttribute("href") || "";
+
+        if(
+          href.startsWith("#") ||
+          a.target === "_blank" ||
+          href.startsWith("http") ||
+          href.startsWith("mailto:") ||
+          href.startsWith("tel:")
+        ) return;
+
+        e.preventDefault();
+        document.body.classList.add("leaving");
+        setTimeout(() => {
+          window.location.href = href;
+        }, 220);
+      });
+    }
+
+    init();
+  </script>
+</body>
+</html>
